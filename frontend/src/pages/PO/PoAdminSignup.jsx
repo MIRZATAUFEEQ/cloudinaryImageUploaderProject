@@ -82,7 +82,7 @@ const PoAdminSignup = () => {
                     </div>
                     <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1'>
                         <button type='submit'>
-                            Admin SignUp
+                            PO SignUp
                         </button>
                     </div>
                     <Link to='/adminlogin'>
