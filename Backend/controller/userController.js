@@ -87,8 +87,33 @@ export const loginUser = async (req, res) => {
 
 
 
-// cloudinary configration 😃✅😂😐✂️😃😂✅🥰😎💸😡
+// logoutUser route controller is here ❤️🤣😀😡💸😎🥰✅😂😃✂️😐
+export const logoutUser = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]; // Assuming the token is in the "Authorization" header
 
+    if (!token) {
+        return res.status(400).send('No token provided');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Add the token to the blacklist with its expiration time
+        await Logout.create({
+            token,
+            expiration: new Date(decoded.exp * 1000), // JWT expiration time in milliseconds
+        });
+
+        res.status(200).send('User logged out successfully');
+
+    } catch (error) {
+        res.status(500).send('Failed to log out');
+    }
+};
+
+
+
+// cloudinary configration 😃✅😂😐✂️😃😂✅🥰😎💸😡
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -147,29 +172,6 @@ export const uploadImage = async (req, res) => {
 
 
 
-// logoutUser route controller is here ❤️🤣😀😡💸😎🥰✅😂😃✂️😐
-export const logoutUser = async (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // Assuming the token is in the "Authorization" header
-
-    if (!token) {
-        return res.status(400).send('No token provided');
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Add the token to the blacklist with its expiration time
-        await Logout.create({
-            token,
-            expiration: new Date(decoded.exp * 1000), // JWT expiration time in milliseconds
-        });
-
-        res.status(200).send('User logged out successfully');
-
-    } catch (error) {
-        res.status(500).send('Failed to log out');
-    }
-};
 
 
 // get all images

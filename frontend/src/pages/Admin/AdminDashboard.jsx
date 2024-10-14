@@ -40,23 +40,25 @@ const AdminDashboard = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className='bg-[rgb(173,97,25)] h-auto'>
-      <h1>Admin Dashboard</h1>
+    <div className='bg-[rgb(173,97,25)] h-auto w-auto'>
+      <h1 className='text-center'>Admin Dashboard</h1>
       <div className='border w-full h-full'>
-        <div className='h-auto border flex justify-center gap-x-80'>
+        <div className='h-auto border flex justify-center gap-x-52'>
           <div>Username</div>
           <div>Email</div>
           <div>Images</div>
+          <div>Date</div>
           <div>Status</div>
         </div>
 
         {images.map((image, index) => (
-          <div key={image._id} className='flex justify-center gap-x-60 pt-5'>
+          <div key={image._id} className='flex justify-center gap-x-32 pt-5'>
             <div>{image.user.username}</div>
             <div>{image.user.email}</div>
             <div>
               <img src={image.path} alt={image.filename} className='w-24 h-auto rounded-md' />
             </div>
+            <div>{new Date(image.createdAt).toLocaleString()}</div>
             <button
               className='border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white'
               onClick={() => handleClick(index)} // Pass the index to handleClick
