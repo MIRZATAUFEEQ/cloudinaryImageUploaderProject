@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 
-const AdminSignup = () => {
+const PoAdminSignup = () => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -94,4 +94,4 @@ const AdminSignup = () => {
     )
 }
 
-export default AdminSignup
+export default PoAdminSignup

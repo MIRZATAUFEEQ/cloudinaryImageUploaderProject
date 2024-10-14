@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
-const AdminLogin = () => {
+const PoAdminLogin = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -72,4 +72,4 @@ const AdminLogin = () => {
     );
 };
 
-export default AdminLogin;
+export default PoAdminLogin;

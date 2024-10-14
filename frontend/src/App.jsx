@@ -7,10 +7,9 @@ import Profile from './pages/Profile'
 import Login from './pages/Login'
 // import ProtectedRoute from './components/ProtectedRoute'
 import PrivateRoute from './pages/PrivateRoute'
-import AdminSignup from './pages/Admin/AdminSignup'
-import AdminLogin from './pages/Admin/AdminLogin'
-import AdminDashbord from './pages/Admin/AdminDashboard';
-import Logout from '../../Backend/models/userlogou.models'
+import PoAdminSignup from './pages/PO/PoAdminSignup'
+import PoAdminLogin from './pages/PO/PoAdminLogin'
+import PoAdminDashbord from './pages/PO/PoAdminDashboard';
 
 
 
@@ -26,9 +25,9 @@ const App = () => {
             <Route exact path='/profile' element={<Profile />} />
             <Route path="/upload" element={<PrivateRoute><ImageUpload /></PrivateRoute>} />
             {/* admin route  */}
-            <Route exact path='/adminsignup' element={<AdminSignup />} />
-            <Route exact path='/adminlogin' element={<AdminLogin />} />
-            <Route exact path='/adminDashbord' element={<AdminDashbord />} />
+            <Route exact path='/adminsignup' element={<PoAdminSignup />} />
+            <Route exact path='/adminlogin' element={<PoAdminLogin />} />
+            <Route exact path='/adminDashbord' element={<PoAdminDashbord />} />
 
 
           </Routes>

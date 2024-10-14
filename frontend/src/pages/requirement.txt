@@ -1,60 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// Assuming you're using Express
+const express = require('express');
+const router = express.Router();
+const Image = require('../models/Image'); // Your image model
 
-const AdminDashboard = () => {
-    const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/api/admin/images', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}` // Use your token logic here
-                    }
-                });
-                setImages(response.data);
-            } catch (err) {
-                setError('Failed to fetch images');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchImages();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-
-    return (
-        <div className=''>
-            <h1>Admin Dashboard</h1>
-
-            <table className=''>
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Image</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {images.map((image) => (
-                        <tr key={image._id}>
-                            <td>{image.user.username}</td>
-                            <td>{image.user.email}</td>
-                            <td>
-                                <img src={image.path} alt={image.filename} style={{ width: '100px', height: 'auto' }} />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+// Update image status and completion date
+router.patch('/admin/images/:id', async (req, res) => {
+  try {
+    const { status, completedAt } = req.body;
+    const updatedImage = await Image.findByIdAndUpdate(
+      req.params.id,
+      { status, completedAt },
+      { new: true }
     );
-};
+    res.status(200).json(updatedImage);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update status' });
+  }
+});
 
-export default AdminDashboard;
+module.exports = router;

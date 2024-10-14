@@ -141,7 +141,9 @@ export const uploadImage = async (req, res) => {
             contentType: req.file.mimetype,
             size: req.file.size,
             username: user.username,
-            user: user._id
+            user: user._id,
+            createdAt: new Date(), // Set uploadedAt when the image is created
+            status: 'pending'
         });
 
         await image.save();
@@ -170,7 +172,27 @@ export const uploadImage = async (req, res) => {
     }
 };
 
+//update image status and completion
+export const updateImageStatus = async (req, res) => {
+    try {
+        const { status, completedAt } = req.body
+        const updateImage = await Image.findByIdAndUpdate(
+            req.params.id,
+            {
+                status, completedAt: new Date(),
+            },
+            {
+                new: true
+            },
+        )
+        res.status(200).json(updateImage)
+    } catch (error) {
+        res.status(500).json({
+            error: 'error update image',
+        })
+    }
 
+}
 
 
 
