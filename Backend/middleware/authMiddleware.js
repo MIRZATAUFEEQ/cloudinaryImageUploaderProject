@@ -1,14 +1,27 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/usermodel');
+import jwt from 'jsonwebtoken';
+import User from '../models/usermodel.js';
+import Logout from '../models/userlogou.models.js'; // Assuming this is your logout/blacklist model
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
+
+            // Check if the token is blacklisted (i.e., logged out)
+            const blacklistedToken = await Logout.findOne({ token });
+            if (blacklistedToken) {
+                return res.status(401).send('Token has been invalidated. Please log in again.');
+            }
+
+            // Decode and verify the token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            // Find the user by ID and exclude the password field
             req.user = await User.findById(decoded.id).select('-password');
+
+            // Proceed to the next middleware or controller
             next();
         } catch (error) {
             res.status(401).send('Not authorized, token failed');
@@ -19,31 +32,5 @@ const protect = async (req, res, next) => {
         res.status(401).send('No token, authorization denied');
     }
 };
-
-module.exports = { protect };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

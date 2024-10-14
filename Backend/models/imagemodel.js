@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 
 let imageSchema = new mongoose.Schema({
     filename: {
@@ -17,11 +17,17 @@ let imageSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
- 
+    username: {
+        type: String, required: true
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    }
+
 
 }, { timestamps: true })
 
 const Image = mongoose.model('Image', imageSchema)
 export default Image
-
 

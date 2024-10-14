@@ -1,10 +1,10 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [formData, setformData] = useState({ email: '', password: '' })
-
+    const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault()
         const { email, password } = formData
@@ -16,6 +16,7 @@ const Login = () => {
             })
             // console.log(result.data)
             alert(`${formData.email} successfully logedIn`)
+            navigate('/upload')
         } catch (error) {
             // console.log('user not found', error)
             alert(` login failed ${error}`)

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
   return (
@@ -13,10 +14,14 @@ const App = () => {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route exact path='/' element={<ImageUpload />} />
             <Route exact path='/registeruser' element={<Signup />} />
-            <Route exact path='/loginuser' element={<Login />} />
+            <Route exact path='/' element={<Login />} />
             <Route exact path='/profile' element={<Profile />} />
+            <Route exact path='/upload' element={
+              <ProtectedRoute>
+                <ImageUpload />
+              </ProtectedRoute>
+            } />
           </Routes>
 
         </BrowserRouter>

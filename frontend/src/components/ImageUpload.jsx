@@ -9,12 +9,10 @@ const ImageUpload = () => {
 
     // previewFiles in the your webpage or clientside 😃😂🥰😎😐😀
     function previewFiles(selectedFile) {
-        const reader = new FileReader()
-        reader.readAsDataURL(selectedFile)
-        // console.log(`image uploaded successfully in client side ${reader}`)
+        const reader = new FileReader()//read file
+        reader.readAsDataURL(selectedFile)//read as a url
         reader.onloadend = () => {
             setimage(reader.result)
-            // console.log(image)
         }
     }
 
@@ -43,14 +41,13 @@ const ImageUpload = () => {
                 }
             })
             setUploadedUrl(response.data.cloudinaryUrl)//cloudniray url
-            alert(`your has  successfully uploaded`)
+            alert(`your image has been successfully uploaded`)
 
         } catch (error) {
             alert(`Image Upload Failed ${error}`)
 
         }
     }
-
 
     return (
         <>
@@ -64,7 +61,7 @@ const ImageUpload = () => {
                         <button className='bg-[rgb(29,170,147)] w-full rounded-full py-2' type='submit'>Upload</button>
                     </div>
                 </form>
-
+                {/* image upload logic here */}
                 {image &&
                     <img src={image} alt="sahil" />
                 }

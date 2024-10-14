@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-
+const navigate=useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, email, password } = formData;
@@ -18,9 +18,10 @@ const Signup = () => {
                 username, email, password
             });
             // console.log(result.data);  // Success message in the console
-            alert(`${formData.username} is successfully SignUp`)
+            alert(`${formData.email} is successfully SignUp`)
+navigate('/upload')
         } catch (error) {
-            alert(`signup failed please enter valid username password or email${error}`)
+            alert(`signup failed this user is already exists ${error}`)
             // console.error('Error registering user:', err);
         }
     };
@@ -63,6 +64,7 @@ const Signup = () => {
                         placeholder='Enter your password'
                         onChange={handleChange}
                         autoComplete='password'
+
                     />
                 </div>
                 <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1'>
@@ -70,7 +72,7 @@ const Signup = () => {
                         SignUp
                     </button>
                 </div>
-                <Link to='/loginuser'>
+                <Link to='/'>
                     <li className='list-none text-gray-500'>I have already a account</li>
                 </Link>
             </form>

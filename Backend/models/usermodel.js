@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 
-// Load environment variables from .env file
+// Load environment variables from .env file✅😀🤣😂
 dotenv.config()
 
 mongoose.connect(process.env.DB_URL)
@@ -18,15 +18,25 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+    },
+    uploadedImages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    }],
+    isAdmin: {
+        type: Boolean,
+        default: false,
     },
 });
 
-// Hash password before saving user to the database
+// Hash password before saving user to the database✅
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         return next();
     }
+
+    // generat salt of a password ✅
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
