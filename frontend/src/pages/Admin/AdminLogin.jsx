@@ -1,8 +1,8 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-
-const Login = () => {
+// src/components/AdminLogin.js
+import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+const AdminLogin = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -18,22 +18,25 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/api/user/loginuser', formData);
-            localStorage.setItem('token', response.data.token);  // Save token
-            alert(`${formData.email} Login Successfully`);
-            console.log(response)
-            navigate('/upload');  // Redirect to image upload after login
+            const { token, isAdmin } = response.data;
+
+            if (isAdmin) {
+                localStorage.setItem('token', token);  // Save token
+                alert('Admin Login successful!');
+                navigate('/adminDashbord');  // Redirect to image upload after login
+            } else {
+                alert('Access denied. You are not an admin.');
+            }
         } catch (error) {
-            alert(`please register`)
-            navigate('registeruser')
-            console.error('Error logging in', error);
+            console.error('Error logging in as admin', error);
+            alert(error.response?.data || 'Error logging in as admin');
         }
     };
-
 
     return (
         <>
             <div className='w-full h-screen bg-[rgb(173,97,25)] flex flex-col justify-center items-center'>
-                <form encType="multipart/form-data" onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
+                <form onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
                     <div className='border rounded-2xl p-2'>
                         <input
                             type="email"
@@ -58,16 +61,16 @@ const Login = () => {
                     </div>
                     <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1'>
                         <button type='submit'>
-                            Login
+                            AdminLogin
                         </button>
                     </div>
-                    <Link to='/registeruser'>
+                    <Link to='/adminsignup'>
                         <li className='list-none text-gray-500'>Don't have account</li>
                     </Link>
                 </form>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Login
+export default AdminLogin;

@@ -1,11 +1,11 @@
 import User from '../models/usermodel.js';
 import generateToken from '../utils/generatetoken.js';
 import Image from '../models/imagemodel.js';
-import cloudinarypkg from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import * as fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Logout from '../models/userlogou.models.js';
-const cloudinary = cloudinarypkg.v2;
+// const cloudinary = cloudinarypkg.v2;
 
 
 
@@ -103,6 +103,9 @@ export const uploadImage = async (req, res) => {
             return res.status(401).send('Unauthorized. Please login.');
         }
 
+        if (!req.file) {
+            return res.status(400).send('No file uploaded')
+        }
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: 'user_avatar',
         });
@@ -113,7 +116,7 @@ export const uploadImage = async (req, res) => {
             contentType: req.file.mimetype,
             size: req.file.size,
             username: user.username,
-            user:user._id
+            user: user._id
         });
 
         await image.save();
@@ -171,22 +174,22 @@ export const logoutUser = async (req, res) => {
 
 // get all images
 //you can see all images which is uplod by image uploader
-export const getAllImages = async (req, res) => {
-    try {
-        // find all images from Image model and store in a object 
-        const images = await Image.find({})
-        res.status(201).send(images)
+// export const getAllImages = async (req, res) => {
+//     try {
+//         // find all images from Image model and store in a object 
+//         const images = await Image.find({})
+//         res.status(201).send(images)
 
-    } catch (error) {
-        res.status(500).send({
-            message: 'could not found images'
-        })
-    }
-}
+//     } catch (error) {
+//         res.status(500).send({
+//             message: 'could not found images'
+//         })
+//     }
+// }
 
 
 
-// PO route controller is here
+// PO Admin route controller is here
 export const getAllImagesOfUser = async (req, res) => {
     try {
         const images = await Image.find({}).populate('user', 'username email')

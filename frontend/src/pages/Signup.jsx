@@ -3,36 +3,33 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
-    const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-const navigate=useNavigate()
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const { username, email, password } = formData;
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
 
-        // Log user data to the console for debugging
-        // console.log("User Data:", formData);
-
-        try {
-            // Send user data to the backend for registration
-            const result = await axios.post('http://localhost:3000/api/user/registeruser', {
-                username, email, password
-            });
-            // console.log(result.data);  // Success message in the console
-            alert(`${formData.email} is successfully SignUp`)
-navigate('/upload')
-        } catch (error) {
-            alert(`signup failed this user is already exists ${error}`)
-            // console.error('Error registering user:', err);
-        }
-    };
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:3000/api/user/registeruser', formData);
+            localStorage.setItem('token', response.data.token);  // Save token
+            alert(`${formData.username} SignUp Successfully`)
+            navigate('/upload');  // Redirect to image upload after signup
+        } catch (error) {
+            console.error('Error signing up', error);
+        }
+    };
+
     return (
         <div className='w-full h-screen bg-[rgb(173,97,25)] flex flex-col justify-center items-center'>
-            <form onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
+            <form encType="multipart/form-data" onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
                 <div className='border rounded-2xl p-2'>
                     <input
                         type="text"
