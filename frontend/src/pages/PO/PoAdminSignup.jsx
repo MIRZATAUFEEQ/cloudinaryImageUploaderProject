@@ -22,11 +22,11 @@ const PoAdminSignup = () => {
         try {
             const response = await axios.post('http://localhost:3000/api/user/registeruser', formData);
             localStorage.setItem('token', response.data.token);  // Save token
-            alert('Admin Signup successful!');
-            navigate('/adminDashbord');  // Redirect to image upload after signup
+            alert('PO Signup successful!');
+            navigate('/po/dashboard');  // Redirect to image upload after signup
         } catch (error) {
-            console.error('Error signing up as admin', error);
-            alert(error.response?.data || 'Error signing up as admin');
+            console.error('Error signing up as PO', error);
+            alert(error.response?.data || 'Error signing up as PO');
         }
     };
 
@@ -85,8 +85,8 @@ const PoAdminSignup = () => {
                             PO SignUp
                         </button>
                     </div>
-                    <Link to='/adminlogin'>
-                        <li className='list-none text-gray-500'>Login as a admin</li>
+                    <Link to='/po/login'>
+                        <li className='list-none text-gray-500'>Login as a PO</li>
                     </Link>
                 </form>
             </div>

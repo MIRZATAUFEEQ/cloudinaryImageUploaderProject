@@ -24,12 +24,24 @@ let imageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    status: {
+    // Add POStatus and POCompletedAt fields
+    POstatus: {
         type: String,
         default: 'Pending',
     },
 
-    completedAt: Date
+    POcompletedAt: {
+        type: Date,
+    },
+    // Add Accountantstatus and AccountantcompletedAt fields
+    Accountantstatus: {
+        type: String,
+        default: 'Pending',
+    },
+    AccountantcompletedAt: {
+        type: Date
+    }
+
 
 }, { timestamps: true })
 

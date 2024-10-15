@@ -5,7 +5,7 @@ const PoAdminDashboard = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [statuses, setStatuses] = useState([]);
+  const [POstatuses, setPOStatuses] = useState([]);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -17,9 +17,9 @@ const PoAdminDashboard = () => {
         });
         setImages(response.data);
 
-        // Initialize statuses array based on the status from the database
-        const fetchedStatuses = response.data.map(image => image.status === 'Done' ? 'Done' : 'Pending');
-        setStatuses(fetchedStatuses);
+        // Initialize POstatuses array based on the POstatus from the database
+        const fetchedPOStatuses = response.data.map(image => image.POstatus === 'Done' ? 'Done' : 'Pending');
+        setPOStatuses(fetchedPOStatuses);
       } catch (err) {
         setError('Failed to fetch images');
         console.error(err);
@@ -34,30 +34,30 @@ const PoAdminDashboard = () => {
   const handleClick = async (index, imageId) => {
     try {
       // Get the current date and time
-      const completedAt = new Date().toISOString();
+      const POcompletedAt = new Date().toISOString();
 
-      // Update status in the backend
+      // Update POstatus in the backend
       await axios.patch(`http://localhost:3000/api/admin/images/${imageId}`, {
-        status: 'Done',
-        completedAt: completedAt
+        POstatus: 'Done',
+        POcompletedAt: POcompletedAt
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}` // Use your token logic here
         }
       });
 
-      // Update status in the frontend
-      const newStatuses = [...statuses];
-      newStatuses[index] = 'Done';
-      setStatuses(newStatuses);
+      // Update POstatus in the frontend
+      const newPOStatuses = [...POstatuses];
+      newPOStatuses[index] = 'Done';
+      setPOStatuses(newPOStatuses);
 
-      // Optionally update the completedAt in the images array for the clicked image
+      // Optionally update the POcompletedAt in the images array for the clicked image
       const updatedImages = [...images];
-      updatedImages[index].completedAt = completedAt;
+      updatedImages[index].POcompletedAt = POcompletedAt;
       setImages(updatedImages);
 
     } catch (error) {
-      console.error('Failed to update status', error);
+      console.error('Failed to update POstatus', error);
     }
   };
 
@@ -73,8 +73,8 @@ const PoAdminDashboard = () => {
           <div>Email</div>
           <div>Images</div>
           <div>Created At</div>
-          <div>Completed At</div>
-          <div>Status</div>
+          <div>POCompletedAt</div>
+          <div>POStatus</div>
         </div>
 
         {images.map((image, index) => (
@@ -82,20 +82,21 @@ const PoAdminDashboard = () => {
             <div>{image.user.username}</div>
             <div>{image.user.email}</div>
             <div>
-              <img src={image.path} alt={image.filename} className='w-24 h-auto rounded-md' />
+              <img src={image.path} alt={image.filename} onDoubleClick={() => window.open(image.path, '_blank')} className='w-24 h-auto rounded-md' />
             </div>
             {/* Format and display the createdAt date */}
             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
             <div>
-              {image.completedAt
-                ? new Date(image.completedAt).toLocaleString()
+              {image.POcompletedAt
+                ? new Date(image.POcompletedAt).toLocaleString()
                 : 'Not Completed Yet'}
             </div>
             <button
-              className='border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300'
+              className={`border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300 ${POstatuses[index] === 'Done' ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => handleClick(index, image._id)} // Pass the index and image ID to handleClick
+              disabled={POstatuses[index] === 'Done'} // Disable the button if POstatus is 'Done'
             >
-              {statuses[index]} {/* Display the corresponding status */}
+              {POstatuses[index]} {/* Display the corresponding POstatus */}
             </button>
 
           </div>

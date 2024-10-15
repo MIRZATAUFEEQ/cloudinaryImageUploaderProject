@@ -11,6 +11,11 @@ import PoAdminSignup from './pages/PO/PoAdminSignup'
 import PoAdminLogin from './pages/PO/PoAdminLogin'
 import PoAdminDashbord from './pages/PO/PoAdminDashboard';
 import AccountantAdminSignup from './pages/Accountant/AccountantAdminSignup'
+import AccountantAdminLogin from './pages/Accountant/AccountantAdminLogin'
+import AccountantAdminDashboard from './pages/Accountant/AccountantAdminDashboard'
+import AdminSignup from './pages/Admin/AdminSignup'
+import AdminLogin from './pages/Admin/AdminLogin'
+import AdminDashboard from './pages/Admin/AdminDashboard'
 
 
 const App = () => {
@@ -25,12 +30,17 @@ const App = () => {
             <Route exact path='/profile' element={<Profile />} />
             <Route path="/upload" element={<PrivateRoute><ImageUpload /></PrivateRoute>} />
             {/*PO admin route  */}
-            <Route exact path='/adminsignup' element={<PoAdminSignup />} />
-            <Route exact path='/adminlogin' element={<PoAdminLogin />} />
-            <Route exact path='/adminDashbord' element={<PoAdminDashbord />} />
-            <Route exact path='/accountant/signup' element={<AccountantAdminSignup />}/>
-          </Routes>
+            <Route exact path='/po/signup' element={<PoAdminSignup />} />
+            <Route exact path='/po/login' element={<PoAdminLogin />} />
+            <Route exact path='/po/dashboard' element={<PoAdminDashbord />} />
+            <Route exact path='/accountant/signup' element={<AccountantAdminSignup />} />
+            <Route exact path='/accountant/login' element={<AccountantAdminLogin />} />
+            <Route exact path='/accountant/dashboard' element={<AccountantAdminDashboard />} />
+            <Route exact path='/admin/signup' element={<AdminSignup />} />
+            <Route exact path='/admin/login' element={<AdminLogin />} />
+            <Route exact path='/admin/dashboard' element={<AdminDashboard />} />
 
+          </Routes>
         </BrowserRouter>
       </div>
     </>

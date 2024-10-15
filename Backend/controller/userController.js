@@ -5,91 +5,61 @@ import { v2 as cloudinary } from 'cloudinary';
 import * as fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Logout from '../models/userlogou.models.js';
-// const cloudinary = cloudinarypkg.v2;
 
-
-
-
-// Register User✅😃👟😎🤣❌💸✂️
+// Register User
 export const registerUser = async (req, res) => {
     try {
-        // get username,email,password from req.body✅
         const { username, email, password, adminRegistrationToken } = req.body;
 
-        let isAdmin = false
+        let isAdmin = false;
         if (adminRegistrationToken === process.env.ADMIN_REGISTRATION_TOKEN) {
-            isAdmin = true
+            isAdmin = true;
         }
 
-
-        // find user existence in data base ✅
-        const userExist = await User.findOne({ email })
-
-        // if user exist then show message ✅
+        const userExist = await User.findOne({ email });
         if (userExist) {
-            return res.status(400).send('User already exists, please login.')
+            return res.status(400).send('User already exists, please login.');
         }
-        // now create new user ✅
-        const createUser = await User.create({
-            username,
-            email,
-            password,
-            isAdmin: isAdmin
-        })
 
-        // if user is successfully created then send response to database✅
+        const createUser = await User.create({ username, email, password, isAdmin });
+
         if (createUser) {
             res.status(201).json({
                 _id: createUser._id,
                 username: createUser.username,
                 email: createUser.email,
                 isAdmin: createUser.isAdmin,
-                token: generateToken(createUser._id)
-            })
-
-            // save user details in database✅
-            await createUser.save()
-        }
-        else {
-            res.status(400).send('Invalid user data')
+                token: generateToken(createUser._id),
+            });
+            await createUser.save();
+        } else {
+            res.status(400).send('Invalid user data');
         }
     } catch (error) {
-        res.status(400).send({
-            message: 'faild to creating user'
-        })
+        res.status(400).send({ message: 'Failed to create user' });
     }
-}
+};
 
-
-
-// Login User ✅😃👟😎🤣❌💸✂️
-
+// Login User
 export const loginUser = async (req, res) => {
-    // get email and password from req.body ✅
     const { email, password } = req.body;
-
-    // find user userExist or not in database✅
     const userExist = await User.findOne({ email });
 
-    // match entered email and password✅
-    //  from existing email and password✅
     if (userExist && await userExist.matchPassword(password)) {
         res.status(201).json({
             _id: userExist._id,
             email: userExist.email,
             isAdmin: userExist.isAdmin,
-            token: generateToken(userExist._id)
+            token: generateToken(userExist._id),
         });
     } else {
         res.status(401).send('Invalid email or password');
     }
-}
+};
 
-
-
-// logoutUser route controller is here ❤️🤣😀😡💸😎🥰✅😂😃✂️😐
+// Logout User
 export const logoutUser = async (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // Assuming the token is in the "Authorization" header
+    const token = req.headers.authorization.split(' ')[1];
 
     if (!token) {
         return res.status(400).send('No token provided');
@@ -97,30 +67,25 @@ export const logoutUser = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Add the token to the blacklist with its expiration time
         await Logout.create({
             token,
-            expiration: new Date(decoded.exp * 1000), // JWT expiration time in milliseconds
+            expiration: new Date(decoded.exp * 1000),
         });
 
         res.status(200).send('User logged out successfully');
-
     } catch (error) {
         res.status(500).send('Failed to log out');
     }
 };
 
-
-
-// cloudinary configration 😃✅😂😐✂️😃😂✅🥰😎💸😡
+// Cloudinary configuration
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// controller for uploading image✅💸✂️🤣😂😃
+// Upload image
 export const uploadImage = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
@@ -129,11 +94,10 @@ export const uploadImage = async (req, res) => {
         }
 
         if (!req.file) {
-            return res.status(400).send('No file uploaded')
+            return res.status(400).send('No file uploaded');
         }
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'user_avatar',
-        });
+        
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'user_avatar' });
 
         const image = new Image({
             filename: req.file.filename,
@@ -142,86 +106,55 @@ export const uploadImage = async (req, res) => {
             size: req.file.size,
             username: user.username,
             user: user._id,
-            createdAt: new Date(), // Set uploadedAt when the image is created
-            status: 'pending'
+            createdAt: new Date(),
+            POstatus: 'pending',
+            Accountantstatus: 'pending',
         });
 
         await image.save();
         fs.unlinkSync(req.file.path);
 
         user.imageCount += 1;
-        await user.save(); // Save the updated user document
-
-
-        // Add the image ID to the user's uploadedImages array
         user.uploadedImages.push(image._id);
-        await user.save(); // Save the updated user document
+        await user.save();
 
         res.status(201).send({
             message: 'Image uploaded successfully',
             imageUrl: result.secure_url,
             username: user.username,
-            uploadedImages: user.uploadedImages, // Send back the list of uploaded images
-            imageCount: user.imageCount, // Send back the updated count
+            uploadedImages: user.uploadedImages,
+            imageCount: user.imageCount,
         });
-
-
     } catch (error) {
         console.error('Error uploading image', error);
         res.status(500).send('Error uploading image');
     }
 };
 
-//update image status and completion
+// Update image status and completion
 export const updateImageStatus = async (req, res) => {
     try {
-        const { status, completedAt } = req.body
-        const updateImage = await Image.findByIdAndUpdate(
-            req.params.id,
-            {
-                status, completedAt: new Date(),
-            },
-            {
-                new: true
-            },
-        )
-        res.status(200).json(updateImage)
+        const { POstatus, POcompletedAt, Accountantstatus, AccountantcompletedAt } = req.body;
+
+        const updateData = {};
+        if (POstatus) updateData.POstatus = POstatus;
+        if (POcompletedAt) updateData.POcompletedAt = new Date();
+        if (Accountantstatus) updateData.Accountantstatus = Accountantstatus;
+        if (AccountantcompletedAt) updateData.AccountantcompletedAt = new Date();
+
+        const updateImage = await Image.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        res.status(200).json(updateImage);
     } catch (error) {
-        res.status(500).json({
-            error: 'error update image',
-        })
+        res.status(500).json({ error: 'Error updating image' });
     }
+};
 
-}
-
-
-
-// get all images
-//you can see all images which is uplod by image uploader
-// export const getAllImages = async (req, res) => {
-//     try {
-//         // find all images from Image model and store in a object 
-//         const images = await Image.find({})
-//         res.status(201).send(images)
-
-//     } catch (error) {
-//         res.status(500).send({
-//             message: 'could not found images'
-//         })
-//     }
-// }
-
-
-
-// PO Admin route controller is here
+// Get all images of users
 export const getAllImagesOfUser = async (req, res) => {
     try {
-        const images = await Image.find({}).populate('user', 'username email')
-        // console.log('images fetched',images)
-        res.status(200).json(images)
+        const images = await Image.find({}).populate('user', 'username email');
+        res.status(200).json(images);
     } catch (error) {
-        res.status(500).send('error geting images')
+        res.status(500).send('Error getting images');
     }
-}
-
-
+};

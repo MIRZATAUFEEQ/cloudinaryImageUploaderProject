@@ -21,14 +21,14 @@ const PoAdminLogin = () => {
 
             if (isAdmin) {
                 localStorage.setItem('token', token);  // Save token
-                alert('Admin Login successful!');
-                navigate('/adminDashbord');  // Redirect to image upload after login
+                alert('PO Login successful!');
+                navigate('/po/dashboard');  // Redirect to image upload after login
             } else {
-                alert('Access denied. You are not an admin.');
+                alert('Access denied. You are not PO.');
             }
         } catch (error) {
             console.error('Error logging in as admin', error);
-            alert(error.response?.data || 'Error logging in as admin');
+            alert(error.response?.data || 'Error logging in as PO');
         }
     };
 
@@ -58,12 +58,12 @@ const PoAdminLogin = () => {
                             autoComplete='password'
                         />
                     </div>
-                    <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1'>
+                    <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-2xl p-1'>
                         <button type='submit'>
-                            AdminLogin
+                            PO Login
                         </button>
                     </div>
-                    <Link to='/adminsignup'>
+                    <Link to='/po/signup'>
                         <li className='list-none text-gray-500'>Don't have account</li>
                     </Link>
                 </form>
