@@ -46,7 +46,7 @@ const AdminDashboard = () => {
 
   return (
     <div className='bg-[rgb(173,97,25)] h-auto w-auto'>
-      <h1 className='text-center text-2xl text-white'>Accountant Dashboard</h1>
+      <h1 className='text-center text-2xl text-white'>Admin Dashboard</h1>
       <div className='border w-full h-full px-5'>
         <div className='h-auto border flex justify-between gap-x-20'>
           <div>Username</div>
@@ -55,7 +55,6 @@ const AdminDashboard = () => {
           <div>Created At</div>
           <div>POCompletedAt</div>
           <div>AccountantcompletedAt</div>
-          <div>AccountantStatus</div>
         </div>
 
         {images.map((image, index) => (

@@ -84,7 +84,7 @@ const AccountantAdminDashboard = () => {
                 </div>
 
                 {images.map((image, index) => (
-                    <div key={image._id} className='flex justify-between pt-5'>
+                    <div key={image._id} className='flex gap-16 pt-5 text-sm'>
                         <div>{image.user.username}</div>
                         <div>{image.user.email}</div>
                         <div>
@@ -102,12 +102,6 @@ const AccountantAdminDashboard = () => {
                                 ? new Date(image.AccountantcompletedAt).toLocaleString()
                                 : 'Not Completed Yet'}
                         </div>
-                        <button
-                            className='border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300'
-                            onClick={() => handleAccountantClick(index, image._id)} // Pass the index and image ID to handleAccountantClick
-                        >
-                            {accountantStatuses[index]} {/* Display the corresponding AccountantStatus */}
-                        </button>
 
                         <button
                             className={`border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300 ${accountantStatuses[index] === 'Done' ? 'opacity-50 cursor-not-allowed' : ''}`}

@@ -33,10 +33,8 @@ const PoAdminDashboard = () => {
 
   const handleClick = async (index, imageId) => {
     try {
-      // Get the current date and time
       const POcompletedAt = new Date().toISOString();
 
-      // Update POstatus in the backend
       await axios.patch(`http://localhost:3000/api/admin/images/${imageId}`, {
         POstatus: 'Done',
         POcompletedAt: POcompletedAt
@@ -46,12 +44,10 @@ const PoAdminDashboard = () => {
         }
       });
 
-      // Update POstatus in the frontend
       const newPOStatuses = [...POstatuses];
       newPOStatuses[index] = 'Done';
       setPOStatuses(newPOStatuses);
 
-      // Optionally update the POcompletedAt in the images array for the clicked image
       const updatedImages = [...images];
       updatedImages[index].POcompletedAt = POcompletedAt;
       setImages(updatedImages);
@@ -65,26 +61,30 @@ const PoAdminDashboard = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className='bg-[rgb(173,97,25)] h-auto w-auto'>
-      <h1 className='text-center text-2xl text-white'>PO Dashboard</h1>
-      <div className='border w-full h-full'>
-        <div className='h-auto border flex justify-center gap-x-40'>
-          <div>Username</div>
-          <div>Email</div>
-          <div>Images</div>
-          <div>Created At</div>
-          <div>POCompletedAt</div>
-          <div>POStatus</div>
+    <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
+      <h1 className='text-center text-2xl text-white mb-4'>PO Dashboard</h1>
+      <div className='w-full h-full px-5'>
+        <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
+          <div><h3 className='text-white'>Username</h3></div>
+          <div><h3 className='text-white'>Email</h3></div>
+          <div><h3 className='text-white'>Images</h3></div>
+          <div><h3 className='text-white'>Created At</h3></div>
+          <div><h3 className='text-white'>PO Completed At</h3></div>
+          <div><h3 className='text-white'>PO Status</h3></div>
         </div>
 
         {images.map((image, index) => (
-          <div key={image._id} className='flex justify-center gap-x-24 pt-5'>
+          <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
             <div>{image.user.username}</div>
             <div>{image.user.email}</div>
             <div>
-              <img src={image.path} alt={image.filename} onDoubleClick={() => window.open(image.path, '_blank')} className='w-24 h-auto rounded-md' />
+              <img 
+                src={image.path} 
+                alt={image.filename} 
+                onDoubleClick={() => window.open(image.path, '_blank')} 
+                className='w-24 h-auto rounded-md'
+              />
             </div>
-            {/* Format and display the createdAt date */}
             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
             <div>
               {image.POcompletedAt
@@ -93,12 +93,11 @@ const PoAdminDashboard = () => {
             </div>
             <button
               className={`border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300 ${POstatuses[index] === 'Done' ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => handleClick(index, image._id)} // Pass the index and image ID to handleClick
-              disabled={POstatuses[index] === 'Done'} // Disable the button if POstatus is 'Done'
+              onClick={() => handleClick(index, image._id)} 
+              disabled={POstatuses[index] === 'Done'}
             >
-              {POstatuses[index]} {/* Display the corresponding POstatus */}
+              {POstatuses[index]}
             </button>
-
           </div>
         ))}
       </div>
