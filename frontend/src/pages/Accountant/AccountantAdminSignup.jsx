@@ -44,7 +44,7 @@ const AccountantAdminSignup = () => {
                         <input type="password" name="password" autoComplete='curront-password' value={formData.password} onChange={handleChange} placeholder='enter your password' className='outline-none' />
                     </div>
                     <div className='border rounded-2xl p-2'>
-                        <input type="text" name="adminRegistrationToken" value={formData.adminRegistrationToken} onChange={handleChange} placeholder='enter your adminRegistrationToken' className='outline-none' />
+                        <input type="password" name="adminRegistrationToken" value={formData.adminRegistrationToken} onChange={handleChange} placeholder='enter your adminRegistrationToken' className='outline-none' />
                     </div>
                     <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-xl p-1'>
                         <button type='submit'>
