@@ -78,10 +78,10 @@ const PoAdminDashboard = () => {
             <div>{image.user.username}</div>
             <div>{image.user.email}</div>
             <div>
-              <img 
-                src={image.path} 
-                alt={image.filename} 
-                onDoubleClick={() => window.open(image.path, '_blank')} 
+              <img
+                src={image.path}
+                alt={image.filename}
+                onDoubleClick={() => window.open(image.path, '_blank')}
                 className='w-24 h-auto rounded-md'
               />
             </div>
@@ -93,7 +93,7 @@ const PoAdminDashboard = () => {
             </div>
             <button
               className={`border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300 ${POstatuses[index] === 'Done' ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => handleClick(index, image._id)} 
+              onClick={() => handleClick(index, image._id)}
               disabled={POstatuses[index] === 'Done'}
             >
               {POstatuses[index]}
