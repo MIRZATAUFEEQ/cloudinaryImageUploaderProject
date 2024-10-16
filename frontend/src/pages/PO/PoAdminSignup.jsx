@@ -70,7 +70,7 @@ const PoAdminSignup = () => {
                     </div>
                     <div className='border rounded-2xl p-2'>
                         <input
-                            type="text"
+                            type="password"
                             name="adminRegistrationToken"
                             value={formData.adminRegistrationToken}
                             className='outline-none'
