@@ -34,8 +34,9 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-
-    fetchImages();
+    setInterval(() => {
+      fetchImages();
+    }, 2000);
   }, []);
 
 

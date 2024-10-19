@@ -9,10 +9,10 @@ const ImageUpload = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Check if the user is authenticated
+        // Check if the user is authenticated✅
         const token = localStorage.getItem('token');
         if (!token) {
-            // Redirect to login if no token is found
+            // Redirect to login page if no token is found✅
             alert('You need to login first to upload images');
             navigate('/login');
         }
@@ -26,23 +26,32 @@ const ImageUpload = () => {
         };
     };
 
+    // logic for change input tag state✅
     const handleChange = (e) => {
         let selectedFile = e.target.files[0];
         setFile(selectedFile);
         previewFiles(selectedFile);
     };
 
+    // logic for upload image ✅
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // check file is present in input or not 
         if (!file) {
             return alert('please select an image to upload')
         };
 
+        // create a formdata variable✅
         const formData = new FormData();
+
+        // add image by append method ✅
         formData.append('image', file);
 
         try {
-            const token = localStorage.getItem('token');  // Get the token
+            const token = localStorage.getItem('token');  // Get the token✅
+
+            // api call in backend for send images in database✅
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/upload`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,  // Include the token in headers
@@ -50,6 +59,7 @@ const ImageUpload = () => {
                 },
             });
 
+            // uploade image in url form in database
             setUploadedUrl(response.data.imageUrl);
             console.log(response.data)
             alert('Your image has been successfully uploaded');

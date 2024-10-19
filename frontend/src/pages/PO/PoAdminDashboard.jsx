@@ -8,7 +8,7 @@ const PoAdminDashboard = () => {
   const [POstatuses, setPOStatuses] = useState([]);
   const [filter, setFilter] = useState({ POstatus: 'All' });
 
-  
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -18,7 +18,7 @@ const PoAdminDashboard = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-    
+
         console.log('Raw response data:', response.data);
 
         // Apply filtering based on selected filter
@@ -30,12 +30,12 @@ const PoAdminDashboard = () => {
         } else if (filter.POstatus === 'Pending') {
           filteredImages = response.data.filter(image => image.POstatus !== 'Done');
         }
-        
+
         console.log('Filtered Images:', filteredImages);
         setImages(filteredImages);
-        
+
         // Update statuses
-        const newPOStatuses = filteredImages.map(image => 
+        const newPOStatuses = filteredImages.map(image =>
           image.POstatus === 'Done' ? 'Done' : 'Pending'
         );
         setPOStatuses(newPOStatuses);
@@ -47,8 +47,9 @@ const PoAdminDashboard = () => {
         setLoading(false);
       }
     };
-
-    fetchImages();
+    setInterval(() => {
+      fetchImages();
+    }, 2000);
   }, [filter]);
 
   const handleClick = async (index, imageId) => {
@@ -100,23 +101,23 @@ const PoAdminDashboard = () => {
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
     </div>
   );
-  
+
   if (error) return (
     <div className="text-red-500 text-center p-4">
       {error}
     </div>
   );
 
-  
+
   return (
     <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
       <h1 className='text-center text-2xl text-white mb-4 pt-4'>PO Dashboard</h1>
-      
+
       <div className='py-5 px-5'>
         <label htmlFor="POstatus" className='px-2 text-white'>Filter by PO Status:</label>
-        <select 
-          name="POstatus" 
-          value={filter.POstatus} 
+        <select
+          name="POstatus"
+          value={filter.POstatus}
           onChange={handleFilterChange}
           className="rounded-md px-2 py-1"
         >
@@ -159,8 +160,8 @@ const PoAdminDashboard = () => {
               </div>
               <button
                 className={`border h-[2rem] px-6 rounded-xl 
-                  ${POstatuses[index] === 'Done' 
-                    ? 'bg-green-600 opacity-50 cursor-not-allowed' 
+                  ${POstatuses[index] === 'Done'
+                    ? 'bg-green-600 opacity-50 cursor-not-allowed'
                     : 'bg-[rgb(173,97,25)] hover:bg-[rgb(193,117,45)]'} 
                   text-white shadow-lg hover:shadow-xl transition-all duration-300`}
                 onClick={() => handleClick(index, image._id)}

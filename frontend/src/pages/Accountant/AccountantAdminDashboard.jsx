@@ -44,8 +44,10 @@ const AccountantAdminDashboard = () => {
                 setLoading(false);
             }
         };
+        setInterval(() => {
+            fetchImages();
+        }, 2000);
 
-        fetchImages();
     }, [filter]);
 
     const handleAccountantClick = async (index, imageId) => {
