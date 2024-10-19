@@ -9,7 +9,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3000/api/user/logout', {}, {
+            await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/logout`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

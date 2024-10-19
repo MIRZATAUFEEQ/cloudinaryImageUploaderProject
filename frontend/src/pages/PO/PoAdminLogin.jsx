@@ -16,7 +16,7 @@ const PoAdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/user/loginuser', formData);
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/loginuser`, formData);
             const { token, isAdmin } = response.data;
 
             if (isAdmin) {

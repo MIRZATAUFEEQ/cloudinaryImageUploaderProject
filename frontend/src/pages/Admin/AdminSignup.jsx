@@ -13,7 +13,7 @@ const AdminSignup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/registeruser`, formData)
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/registeruser`, formData)
             localStorage.setItem('token', response.data.token)
             alert(`${formData.username} Admin signup successfully`)
             navigate('/admin/dashboard')

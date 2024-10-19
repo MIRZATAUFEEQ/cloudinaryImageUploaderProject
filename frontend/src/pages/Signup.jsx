@@ -18,8 +18,9 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/user/registeruser', formData);
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/registeruser`, formData);
             localStorage.setItem('token', response.data.token);  // Save token
+            console.log(response.data)
             alert(`${formData.username} SignUp Successfully`)
             navigate('/upload');  // Redirect to image upload after signup
         } catch (error) {

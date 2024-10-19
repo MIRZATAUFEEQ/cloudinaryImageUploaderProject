@@ -12,7 +12,7 @@ const AccountantAdminDashboard = () => {
         const fetchImages = async () => {
             try {
                 // Fetch all images
-                const response = await axios.get('http://localhost:3000/api/admin/images', {
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -52,7 +52,7 @@ const AccountantAdminDashboard = () => {
         try {
             const AccountantcompletedAt = new Date().toISOString();
 
-            await axios.patch(`http://localhost:3000/api/admin/images/${imageId}`, {
+            await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
                 Accountantstatus: 'Done',
                 AccountantcompletedAt,
             }, {

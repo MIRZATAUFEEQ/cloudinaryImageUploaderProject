@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/admin/images', {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}` // Use your token logic here
           }
@@ -60,9 +60,7 @@ const AdminDashboard = () => {
           <div>Email</div>
           <div>Images</div>
           <div>Created At</div>
-          {/* <div>POCompletedAt</div> */}
           <div>POtimeTaken</div>
-          {/* <div>AccountantcompletedAt</div> */}
           <div>AccountantTimeTaken</div>
         </div>
 
@@ -75,10 +73,10 @@ const AdminDashboard = () => {
             </div>
             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
 
-            <div>{image.POtimeTaken || 'Not Available'}</div>
+            <div>{image.POtimeTaken ? `${image.POtimeTaken} minute` : 'Not Available'}</div>
 
             <div>
-              {image.AccountantTimeTaken || 'Not Available'}
+              {image.AccountantTimeTaken ? `${image.AccountantTimeTaken} minute` : 'Not Available'}
             </div>
 
           </div>
