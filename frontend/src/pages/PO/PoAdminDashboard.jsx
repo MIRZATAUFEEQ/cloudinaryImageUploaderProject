@@ -47,9 +47,8 @@ const PoAdminDashboard = () => {
         setLoading(false);
       }
     };
-    setInterval(() => {
-      fetchImages();
-    }, 2000);
+
+    fetchImages();
   }, [filter]);
 
   const handleClick = async (index, imageId) => {
