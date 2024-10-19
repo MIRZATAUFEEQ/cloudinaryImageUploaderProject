@@ -5,11 +5,11 @@ import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router();
 
-// Define routes
-router.post('/registeruser', registerUser); // Register route
-router.post('/loginuser', loginUser);       // Login route
+// Define routes✅
+router.post('/registeruser', registerUser); // Register route✅
+router.post('/loginuser', loginUser);       // Login route✅
 router.post('/logout', protect, logoutUser);
-router.post('/upload', protect, upload.single('image'), uploadImage); // image upload route
-// router.get('/images', getAllImages)// get all images route
-// Export the router
+router.post('/upload', protect, upload.single('image'), uploadImage); // image upload route✅
+
+// Export the router✅
 export default router;

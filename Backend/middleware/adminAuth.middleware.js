@@ -15,8 +15,8 @@ export const adminAuth = async (req, res, next) => {
         if (!user || !user.isAdmin) {
             return res.status(403).send('access is available for only Admin')
         }
-        req.user = user  //attach user to request object
-        next()     //proceed to the next middleware or route handler
+        req.user = user  //attach user to request object✅
+        next()     //proceed to the next middleware or route handler✅
     } catch (error) {
         res.status(401).send('token is not valid')
     }

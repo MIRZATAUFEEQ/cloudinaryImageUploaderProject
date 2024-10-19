@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/usermodel.js';
-import Logout from '../models/userlogou.models.js'; // Assuming this is your logout/blacklist model
+import Logout from '../models/userlogou.models.js'; // Assuming this is your logout/blacklist model✅
 
 export const protect = async (req, res, next) => {
     let token;

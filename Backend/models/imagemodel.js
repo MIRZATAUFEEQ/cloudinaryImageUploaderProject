@@ -24,7 +24,8 @@ let imageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    // Add POStatus and POCompletedAt fields
+
+    // Add POStatus and POCompletedAt fields✅
     POstatus: {
         type: String,
         // enum: ['Done', 'Pending'],
@@ -34,7 +35,8 @@ let imageSchema = new mongoose.Schema({
     POcompletedAt: {
         type: Date,
     },
-    // Add Accountantstatus and AccountantcompletedAt fields
+
+    // Add Accountantstatus and AccountantcompletedAt fields✅
     Accountantstatus: {
         type: String,
         default: 'Pending',

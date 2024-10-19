@@ -1,7 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 
-// Configure multer storage
+// Configure multer storage😂🥰😎😐😃✅
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
 
@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     }
 });
 
-// Create the multer instance with the defined storage
+// Create the multer instance with the defined storage✅
 const upload = multer({
     // uploadImages in cloudinary✅
     storage: storage,
