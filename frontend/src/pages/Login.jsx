@@ -17,7 +17,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/user/loginuser', formData);
+            const response = await axios.post(`${process.env.VITE_REACT_APP_API_URL}/api/user/loginuser`, formData);
             localStorage.setItem('token', response.data.token);  // Save token
             alert(`${formData.email} Login Successfully`);
             console.log(response)
