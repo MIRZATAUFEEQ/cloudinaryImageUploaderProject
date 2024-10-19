@@ -39,42 +39,47 @@ const AdminDashboard = () => {
   }, []);
 
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="text-red-500 text-center p-4">
+      {error}
+    </div>
+  );
 
   return (
-    <div className='bg-[rgb(173,97,25)] h-auto w-auto'>
-      <h1 className='text-center text-2xl text-white'>Admin Dashboard</h1>
-      <div className='border w-full h-full px-5'>
-        <div className='h-auto border flex justify-between gap-x-20'>
+    <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
+      <h1 className='text-center text-2xl text-white mb-4'>Admin Dashboard</h1>
+      <div className='w-full h-full px-5'>
+        <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
           <div>Username</div>
           <div>Email</div>
           <div>Images</div>
           <div>Created At</div>
-          <div>POCompletedAt</div>
-          <div>AccountantcompletedAt</div>
+          {/* <div>POCompletedAt</div> */}
+          <div>POtimeTaken</div>
+          {/* <div>AccountantcompletedAt</div> */}
+          <div>AccountantTimeTaken</div>
         </div>
 
         {images.map((image, index) => (
-          <div key={image._id} className='flex justify-between pt-5'>
+          <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
             <div>{image.user.username}</div>
             <div>{image.user.email}</div>
             <div>
-              <img src={image.path} alt={image.filename} onDoubleClick={() => window.open(image.path, '_blank')} className='w-24 h-auto rounded-md' />
+              <img src={image.path} alt={image.filename} onDoubleClick={() => window.open(image.path, '_blank')} className='h-[3rem] w-[4rem] rounded-md ' />
             </div>
             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
-            <div>
-              {image.POcompletedAt
-                ? new Date(image.POcompletedAt).toLocaleString()
-                : 'Not Completed Yet'}
-            </div>
+
+            <div>{image.POtimeTaken || 'Not Available'}</div>
 
             <div>
-              {image.AccountantcompletedAt
-                ? new Date(image.AccountantcompletedAt).toLocaleString()
-                : 'Not Completed Yet'}
+              {image.AccountantTimeTaken || 'Not Available'}
             </div>
-
 
           </div>
         ))}

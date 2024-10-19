@@ -96,7 +96,7 @@ export const uploadImage = async (req, res) => {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
-        
+
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'user_avatar' });
 
         const image = new Image({
@@ -135,14 +135,33 @@ export const uploadImage = async (req, res) => {
 export const updateImageStatus = async (req, res) => {
     try {
         const { POstatus, POcompletedAt, Accountantstatus, AccountantcompletedAt } = req.body;
+        const imageId = req.params.id;
+        const image = await Image.findById(imageId)
+        const currentTime = new Date()
+
 
         const updateData = {};
-        if (POstatus) updateData.POstatus = POstatus;
-        if (POcompletedAt) updateData.POcompletedAt = new Date();
-        if (Accountantstatus) updateData.Accountantstatus = Accountantstatus;
-        if (AccountantcompletedAt) updateData.AccountantcompletedAt = new Date();
 
-        const updateImage = await Image.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        if (POstatus === 'Done' && !image.POtimeTaken) {
+            const timeTaken = parseInt((currentTime - new Date(image.createdAt)) / 1000 / 60)
+            // timeTaken = timeTaken / 60
+            updateData.POtimeTaken = timeTaken
+            updateData.POcompletedAt = currentTime
+        }
+        if (POcompletedAt) updateData.POstatus = POstatus;
+
+
+        if (Accountantstatus === 'Done' && !image.AccountantTimeTaken) {
+
+            const timeTaken = parseInt((currentTime - new Date(image.createdAt)) / 1000 / 60)
+            // timeTaken = timeTaken / 60
+            updateData.AccountantTimeTaken = timeTaken
+            updateData.AccountantcompletedAt = currentTime
+        }
+        if (AccountantcompletedAt) updateData.Accountantstatus = Accountantstatus;
+
+
+        const updateImage = await Image.findByIdAndUpdate(imageId, updateData, { new: true });
         res.status(200).json(updateImage);
     } catch (error) {
         res.status(500).json({ error: 'Error updating image' });
@@ -150,11 +169,23 @@ export const updateImageStatus = async (req, res) => {
 };
 
 // Get all images of users
+
+// Get all images of users with filtering options
 export const getAllImagesOfUser = async (req, res) => {
     try {
-        const images = await Image.find({}).populate('user', 'username email');
+        const { POstatus } = req.query;
+        const filter = {};
+
+        if (POstatus && POstatus !== 'All') {
+            filter.POstatus = POstatus; // Filter by POstatus
+        }
+
+        const images = await Image.find(filter).populate('user'); // Ensure you're populating the user correctly
+        // console.log('Images fetched from DB:', images); // Log images to see what’s returned
         res.status(200).json(images);
     } catch (error) {
-        res.status(500).send('Error getting images');
+        console.error('Error fetching images:', error); // Log any errors
+        res.status(500).json({ message: error.message });
     }
 };
+

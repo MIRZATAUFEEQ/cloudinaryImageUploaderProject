@@ -6,30 +6,50 @@ const PoAdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [POstatuses, setPOStatuses] = useState([]);
+  const [filter, setFilter] = useState({ POstatus: 'All' });
 
+  
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/admin/images', {
+        // First fetch all images
+        const response = await axios.get(`http://localhost:3000/api/admin/images`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` // Use your token logic here
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         });
-        setImages(response.data);
+    
+        console.log('Raw response data:', response.data);
 
-        // Initialize POstatuses array based on the POstatus from the database
-        const fetchedPOStatuses = response.data.map(image => image.POstatus === 'Done' ? 'Done' : 'Pending');
-        setPOStatuses(fetchedPOStatuses);
+        // Apply filtering based on selected filter
+        let filteredImages;
+        if (filter.POstatus === 'All') {
+          filteredImages = response.data;
+        } else if (filter.POstatus === 'Done') {
+          filteredImages = response.data.filter(image => image.POstatus === 'Done');
+        } else if (filter.POstatus === 'Pending') {
+          filteredImages = response.data.filter(image => image.POstatus !== 'Done');
+        }
+        
+        console.log('Filtered Images:', filteredImages);
+        setImages(filteredImages);
+        
+        // Update statuses
+        const newPOStatuses = filteredImages.map(image => 
+          image.POstatus === 'Done' ? 'Done' : 'Pending'
+        );
+        setPOStatuses(newPOStatuses);
+
       } catch (err) {
+        console.error('Error details:', err.response?.data || err.message);
         setError('Failed to fetch images');
-        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchImages();
-  }, []);
+  }, [filter]);
 
   const handleClick = async (index, imageId) => {
     try {
@@ -37,32 +57,75 @@ const PoAdminDashboard = () => {
 
       await axios.patch(`http://localhost:3000/api/admin/images/${imageId}`, {
         POstatus: 'Done',
-        POcompletedAt: POcompletedAt
+        POcompletedAt,
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}` // Use your token logic here
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
 
-      const newPOStatuses = [...POstatuses];
-      newPOStatuses[index] = 'Done';
-      setPOStatuses(newPOStatuses);
+      if (filter.POstatus === 'Pending') {
+        // If we're in pending filter, remove the item
+        setImages(prev => prev.filter((_, i) => i !== index));
+        setPOStatuses(prev => prev.filter((_, i) => i !== index));
+      } else {
+        // Update the status
+        const newPOStatuses = [...POstatuses];
+        newPOStatuses[index] = 'Done';
+        setPOStatuses(newPOStatuses);
 
-      const updatedImages = [...images];
-      updatedImages[index].POcompletedAt = POcompletedAt;
-      setImages(updatedImages);
+        const updatedImages = [...images];
+        updatedImages[index] = {
+          ...updatedImages[index],
+          POstatus: 'Done',
+          POcompletedAt
+        };
+        setImages(updatedImages);
+      }
 
     } catch (error) {
-      console.error('Failed to update POstatus', error);
+      console.error('Failed to update POstatus:', error);
+      alert('Failed to update status. Please try again.');
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    console.log('Filter changed:', { [name]: value });
+    setFilter((prev) => ({ ...prev, [name]: value }));
+  };
 
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="text-red-500 text-center p-4">
+      {error}
+    </div>
+  );
+
+  
   return (
     <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
-      <h1 className='text-center text-2xl text-white mb-4'>PO Dashboard</h1>
+      <h1 className='text-center text-2xl text-white mb-4 pt-4'>PO Dashboard</h1>
+      
+      <div className='py-5 px-5'>
+        <label htmlFor="POstatus" className='px-2 text-white'>Filter by PO Status:</label>
+        <select 
+          name="POstatus" 
+          value={filter.POstatus} 
+          onChange={handleFilterChange}
+          className="rounded-md px-2 py-1"
+        >
+          <option value="All">All</option>
+          <option value="Done">Done</option>
+          <option value="Pending">Pending</option>
+        </select>
+      </div>
+
       <div className='w-full h-full px-5'>
         <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
           <div><h3 className='text-white'>Username</h3></div>
@@ -73,36 +136,45 @@ const PoAdminDashboard = () => {
           <div><h3 className='text-white'>PO Status</h3></div>
         </div>
 
-        {images.map((image, index) => (
-          <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
-            <div>{image.user.username}</div>
-            <div>{image.user.email}</div>
-            <div>
-              <img
-                src={image.path}
-                alt={image.filename}
-                onDoubleClick={() => window.open(image.path, '_blank')}
-                className='w-24 h-auto rounded-md'
-              />
+        {images.length === 0 ? (
+          <div className='text-white text-center py-4'>No images found for the selected filter.</div>
+        ) : (
+          images.map((image, index) => (
+            <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b text-white'>
+              <div>{image.user.username}</div>
+              <div>{image.user.email}</div>
+              <div>
+                <img
+                  src={image.path}
+                  alt={image.filename}
+                  onDoubleClick={() => window.open(image.path, '_blank')}
+                  className='w-24 h-auto rounded-md cursor-pointer hover:opacity-80 transition-opacity'
+                />
+              </div>
+              <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
+              <div>
+                {image.POcompletedAt
+                  ? new Date(image.POcompletedAt).toLocaleString()
+                  : 'Not Completed Yet'}
+              </div>
+              <button
+                className={`border h-[2rem] px-6 rounded-xl 
+                  ${POstatuses[index] === 'Done' 
+                    ? 'bg-green-600 opacity-50 cursor-not-allowed' 
+                    : 'bg-[rgb(173,97,25)] hover:bg-[rgb(193,117,45)]'} 
+                  text-white shadow-lg hover:shadow-xl transition-all duration-300`}
+                onClick={() => handleClick(index, image._id)}
+                disabled={POstatuses[index] === 'Done'}
+              >
+                {POstatuses[index]}
+              </button>
             </div>
-            <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
-            <div>
-              {image.POcompletedAt
-                ? new Date(image.POcompletedAt).toLocaleString()
-                : 'Not Completed Yet'}
-            </div>
-            <button
-              className={`border h-[2rem] px-6 rounded-xl bg-[rgb(173,97,25)] text-white shadow-lg hover:shadow-xl transition-shadow duration-300 ${POstatuses[index] === 'Done' ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={() => handleClick(index, image._id)}
-              disabled={POstatuses[index] === 'Done'}
-            >
-              {POstatuses[index]}
-            </button>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
 };
+
 
 export default PoAdminDashboard;

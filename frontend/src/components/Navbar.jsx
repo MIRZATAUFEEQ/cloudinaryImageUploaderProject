@@ -35,13 +35,8 @@ const Navbar = () => {
                         <Link to=''>
                             <li className='list-none hover:cursor-pointer'><button onClick={handleLogout}>Logout</button></li>
                         </Link>
-                        <li className='list-none hover:cursor-pointer'>contact</li>
                     </nav>
-                    <Link to='/profile'>
-                        <div >
-                            <CgProfile className='text-2xl' />
-                        </div>
-                    </Link>
+
                 </div>
             </div>
         </>

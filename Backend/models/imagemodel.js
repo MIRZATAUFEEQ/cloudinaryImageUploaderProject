@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 
 let imageSchema = new mongoose.Schema({
     filename: {
@@ -15,7 +15,7 @@ let imageSchema = new mongoose.Schema({
     },
     size: {
         type: Number,
-        require: true,
+        required: true,
     },
     username: {
         type: String, required: true
@@ -27,6 +27,7 @@ let imageSchema = new mongoose.Schema({
     // Add POStatus and POCompletedAt fields
     POstatus: {
         type: String,
+        // enum: ['Done', 'Pending'],
         default: 'Pending',
     },
 
@@ -40,10 +41,20 @@ let imageSchema = new mongoose.Schema({
     },
     AccountantcompletedAt: {
         type: Date
+    },
+    POtimeTaken: {
+        type: Number,
+        default: null,
+    },
+    AccountantTimeTaken: {
+        type: Number,
+        default: null
     }
 
 
 }, { timestamps: true })
+
+imageSchema.index({ user: 1, POstatus: 1 });
 
 const Image = mongoose.model('Image', imageSchema)
 export default Image
