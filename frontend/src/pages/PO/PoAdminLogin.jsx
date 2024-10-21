@@ -21,7 +21,7 @@ const PoAdminLogin = () => {
 
             if (isAdmin) {
                 localStorage.setItem('token', token);  // Save token
-                alert('PO Login successful!');
+                alert(`${formData.email} as a PO, Login successful!`);
                 navigate('/podashboard');  // Redirect to image upload after login
             } else {
                 alert('Access denied. You are not PO.');

@@ -21,7 +21,7 @@ const AccountantAdminLogin = () => {
             const { token, isAdmin } = response.data
             if (isAdmin) {
                 localStorage.setItem('token', token)
-                alert(`${formData.email} accountant is login successfully`)
+                alert(`${formData.email} as a accountant, login successfully`)
                 navigate('/accountantdashboard')
             } else {
                 alert(`Access denied. ${formData.email} not Accountant`)

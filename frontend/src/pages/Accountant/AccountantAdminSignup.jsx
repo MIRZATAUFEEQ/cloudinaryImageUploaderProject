@@ -21,7 +21,7 @@ const AccountantAdminSignup = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/registeruser`, formData)
             localStorage.setItem('token', response.data.token)
-            alert(`${formData.username} accountant signup successfully`)
+            alert(`${formData.username} as a accountant, signup successfully`)
             navigate('/accountantdashboard')
 
         } catch (error) {
