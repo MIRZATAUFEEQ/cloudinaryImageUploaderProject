@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Logout from '../models/userlogou.models.js';
 
-// Register User api controller 😃✅😂🥰😎😐
+// Register User api controller 😃✅
 export const registerUser = async (req, res) => {
     try {
         // get user details from req.body ✅
