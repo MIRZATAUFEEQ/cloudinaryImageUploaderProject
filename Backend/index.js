@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 
 // running server on port ✅
 app.listen(port, () => {
-    console.log(`server is running at port http://localhost:${port}`)
+    console.log(`⚙️  server is running at port http://localhost:${port}`)
 })
 
 
