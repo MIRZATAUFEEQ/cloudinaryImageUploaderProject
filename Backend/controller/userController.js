@@ -133,6 +133,9 @@ export const uploadImage = async (req, res) => {
             Accountantstatus: 'pending',
         });
 
+        if (!image) {
+            return res.status(400).send('file not provided')
+        }
         // save in database✅
         await image.save();
 
@@ -157,6 +160,7 @@ export const uploadImage = async (req, res) => {
             imageCount: user.imageCount,
         });
     } catch (error) {
+        fs.unlinkSync(req.file.path)
         console.error('Error uploading image', error);
         res.status(500).send('Error uploading image');
     }
@@ -212,7 +216,7 @@ export const updateImageStatus = async (req, res) => {
 };
 
 
-// Get all images of users api controller 🤣😃😐😎🥰😂✅
+// Get all images of users by all admin api controller 🤣😃😐😎🥰😂✅
 // Get all images of users with filtering options
 export const getAllImagesOfUser = async (req, res) => {
     try {
