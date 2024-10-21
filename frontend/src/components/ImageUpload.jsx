@@ -71,9 +71,9 @@ const ImageUpload = () => {
     };
 
     return (
-        <div className="w-full bg-[rgb(173,97,25)] flex flex-col h-auto items-center gap-5 p-10">
+        <div className="w-full bg-[rgb(1,1,1)] flex flex-col h-auto items-center gap-5 p-10">
             <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data" className="w-full flex flex-col items-center gap-5 p-10">
-                <div className="w-[12rem] h-[10rem] bg-[rgb(0,128,128)] flex flex-col justify-center items-center rounded-3xl">
+                <div className="w-[12rem] h-[10rem] bg-[rgb(0,128,128)] flex flex-col justify-center items-center rounded-3xl border">
                     <input
                         type="file"
                         onChange={handleChange}
@@ -83,7 +83,7 @@ const ImageUpload = () => {
                         accept="image/png, image/jpg, image/jpeg"
                     />
                 </div>
-                <div className="bg-[rgb(29,170,147)] w-[10rem] text-center rounded-full">
+                <div className="bg-[rgb(0,128,128)] w-[10rem] text-[rgb(255,254,254)] font-semibold text-center rounded-full border">
                     <button type="submit" className="w-full py-2">
                         Upload
                     </button>

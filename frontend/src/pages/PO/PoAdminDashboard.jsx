@@ -109,7 +109,7 @@ const PoAdminDashboard = () => {
 
 
   return (
-    <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
+    <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
       <h1 className='text-center text-2xl text-white mb-4 pt-4'>PO Dashboard</h1>
 
       <div className='py-5 px-5'>

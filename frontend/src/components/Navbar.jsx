@@ -23,14 +23,14 @@ const Navbar = () => {
     };
     return (
         <>
-            <div className='w-full bg-[rgb(0,128,128)] '>
+            <div className='w-full bg-[rgb(0,128,128)] text-white text-xl'>
                 <div className='flex justify-center items-center gap-10'>
                     <nav className='flex gap-10 items-center py-3'>
                         <Link to='/'>
-                            <li className='list-none hover:cursor-pointer'>login</li>
+                            <li className='list-none hover:cursor-pointer'>Login</li>
                         </Link>
                         <Link to='/registeruser'>
-                            <li className='list-none hover:cursor-pointer'>signup</li>
+                            <li className='list-none hover:cursor-pointer'>Signup</li>
                         </Link>
                         <Link to=''>
                             <li className='list-none hover:cursor-pointer'><button onClick={handleLogout}>Logout</button></li>

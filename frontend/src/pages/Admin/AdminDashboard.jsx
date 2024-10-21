@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   );
 
   return (
-    <div className='bg-[rgb(173,97,25)] min-h-screen w-full'>
+    <div className='bg-[rgb(1,1,1)] min-h-screen w-full text-white'>
       <h1 className='text-center text-2xl text-white mb-4'>Admin Dashboard</h1>
       <div className='w-full h-full px-5'>
         <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>

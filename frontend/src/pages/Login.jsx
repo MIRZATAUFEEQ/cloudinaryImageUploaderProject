@@ -32,7 +32,7 @@ const Login = () => {
 
     return (
         <>
-            <div className='w-full h-screen bg-[rgb(173,97,25)] flex flex-col justify-center items-center'>
+            <div className='w-full h-screen bg-[rgb(1,1,1)] flex flex-col justify-center items-center'>
                 <form encType="multipart/form-data" onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
                     <div className='border rounded-2xl p-2'>
                         <input
@@ -56,7 +56,7 @@ const Login = () => {
                             autoComplete='password'
                         />
                     </div>
-                    <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1'>
+                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-3xl p-1'>
                         <button type='submit'>
                             Login
                         </button>

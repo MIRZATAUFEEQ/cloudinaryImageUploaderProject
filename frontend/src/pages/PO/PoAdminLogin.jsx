@@ -22,7 +22,7 @@ const PoAdminLogin = () => {
             if (isAdmin) {
                 localStorage.setItem('token', token);  // Save token
                 alert('PO Login successful!');
-                navigate('/po/dashboard');  // Redirect to image upload after login
+                navigate('/podashboard');  // Redirect to image upload after login
             } else {
                 alert('Access denied. You are not PO.');
             }
@@ -34,7 +34,7 @@ const PoAdminLogin = () => {
 
     return (
         <>
-            <div className='w-full h-screen bg-[rgb(173,97,25)] flex flex-col justify-center items-center'>
+            <div className='w-full h-screen bg-[rgb(1,1,1)] flex flex-col justify-center items-center'>
                 <form onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
                     <div className='border rounded-2xl p-2'>
                         <input
@@ -58,12 +58,12 @@ const PoAdminLogin = () => {
                             autoComplete='password'
                         />
                     </div>
-                    <div className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-2xl p-1'>
+                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-2xl p-1'>
                         <button type='submit'>
                             PO Login
                         </button>
                     </div>
-                    <Link to='/po/signup'>
+                    <Link to='/posignup'>
                         <li className='list-none text-gray-500'>Don't have account</li>
                     </Link>
                 </form>

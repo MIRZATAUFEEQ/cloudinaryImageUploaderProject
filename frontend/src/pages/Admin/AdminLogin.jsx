@@ -23,7 +23,7 @@ const AdminLogin = () => {
             if (isAdmin) {
                 localStorage.setItem('token', token)
                 alert('admin login successfully')
-                navigate('/admin/dashboard')
+                navigate('/admindashboard')
             }
             else {
                 console.log('Access denied, you are not admin')
@@ -37,8 +37,7 @@ const AdminLogin = () => {
 
     return (
         <>
-            {/* className='border text-center rounded-2xl bg-[rgb(171,84,37)] text-3xl p-1' */}
-            <div className='w-full h-screen bg-[rgb(173,97,25)] flex flex-col justify-center items-center'>
+            <div className='w-full h-screen bg-[rgb(1,1,1)] flex flex-col justify-center items-center'>
                 <form action="" onSubmit={handleSubmit} className='w-[20rem] h-auto bg-[rgb(255,255,255)] rounded-2xl p-8 flex flex-col gap-10'>
                     <div className='border rounded-2xl p-2'>
                         <input type="email" placeholder='enter your email' onChange={handleChange} value={formData.email} name="email" className='outline-none' />
@@ -46,10 +45,10 @@ const AdminLogin = () => {
                     <div className='border rounded-2xl p-2'>
                         <input type="password" placeholder='enter your password' onChange={handleChange} value={formData.password} name="password" className='outline-none' />
                     </div>
-                    <div className='border rounded-2xl p-2 text-center bg-[rgb(171,84,37)] text-2xl'>
+                    <div className='border rounded-2xl p-2 text-center bg-[rgb(0,128,128)] text-2xl'>
                         <button type='submit'>AdminLogin</button>
                     </div>
-                    <Link to='/admin/signup'>
+                    <Link to='/adminsignup'>
                         <li className='list-none'>Signup as a admin</li>
                     </Link>
                 </form>
