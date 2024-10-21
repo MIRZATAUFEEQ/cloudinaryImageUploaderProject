@@ -3,6 +3,7 @@ import express from 'express';
 import userRouter from './routes/user.routes.js';
 import cors from 'cors';
 import imageRouter from './routes/image.routes.js'
+import { connectDB } from './models/usermodel.js'
 dotenv.config();
 
 const app = express();
@@ -30,8 +31,14 @@ app.get('/', (req, res) => {
 })
 
 // running server on port ✅
-app.listen(port, () => {
-    console.log(`⚙️  server is running at port http://localhost:${port}`)
+connectDB()
+.then(()=>{
+    app.listen(port, () => {
+        console.log(`⚙️  server is running at port http://localhost:${port}`)
+    })
+})
+.catch((err)=>{
+    console.log('db connection failed',err)
 })
 
 

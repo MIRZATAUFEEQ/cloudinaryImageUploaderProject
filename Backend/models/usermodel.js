@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 
 // Load environment variables from .env file✅😀🤣😂
 dotenv.config()
-const connectDB = async () => {
+export const connectDB = async () => {
     try {
         const connectionInstanse = await mongoose.connect(`${process.env.DB_URL}`)
         console.log(`🫙  mongodb connected successfully!! DB host ${connectionInstanse.connection.host}`)
@@ -12,7 +12,7 @@ const connectDB = async () => {
         console.log('mongodb connection failed',error)
     }
 }
-connectDB()
+// connectDB()
 
 const userSchema = new mongoose.Schema({
     username: {
