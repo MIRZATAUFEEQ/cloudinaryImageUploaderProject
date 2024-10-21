@@ -15,6 +15,7 @@ const storage = multer.diskStorage({
 
         // fix the filename field in cloudinary✅
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Fix the filename field
+        
     }
 });
 
