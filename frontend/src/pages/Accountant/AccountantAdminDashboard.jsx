@@ -45,8 +45,8 @@ const AccountantAdminDashboard = () => {
             }
         };
 
-            fetchImages();
-            
+        fetchImages();
+
     }, [filter]);
 
     const handleAccountantClick = async (index, imageId) => {
@@ -107,8 +107,8 @@ const AccountantAdminDashboard = () => {
 
     return (
         <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
-            <h1 className='text-center text-2xl text-white mb-4 pt-4'>Accountant Dashboard</h1>
-
+            <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>Accountant Dashboard</h1>
+            <div className='text-white px-7 py-5 font-serif'>ImageCount: <span className='border p-1 rounded'>{images.length}</span></div>
             <div className='py-5 px-5'>
                 <label htmlFor="Accountantstatus" className='px-2 text-white'>Filter by Status:</label>
                 <select

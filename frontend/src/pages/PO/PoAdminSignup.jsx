@@ -80,7 +80,7 @@ const PoAdminSignup = () => {
 
                         />
                     </div>
-                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-3xl p-1'>
+                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-3xl p-1 text-white'>
                         <button type='submit'>
                             PO SignUp
                         </button>

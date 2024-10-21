@@ -23,7 +23,7 @@ const Navbar = () => {
     };
     return (
         <>
-            <div className='w-full bg-[rgb(0,128,128)] text-white text-xl'>
+            <div className='w-full bg-[rgb(0,128,128)] text-white text-xl font-serif'>
                 <div className='flex justify-center items-center gap-10'>
                     <nav className='flex gap-10 items-center py-3'>
                         <Link to='/'>

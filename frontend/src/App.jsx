@@ -19,7 +19,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard'
 const App = () => {
   return (
     <>
-      <div className='bg-[rgb(1,1,1)] w-full h-screen'>
+      <div className='bg-[rgb(1,1,1)] w-full h-screen font-serif'>
         <BrowserRouter>
           <Navbar />
           <Routes>

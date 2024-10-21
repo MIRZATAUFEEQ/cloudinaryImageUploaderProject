@@ -40,7 +40,7 @@ const AccountantAdminLogin = () => {
                         <input type="email" name="email" className='outline-none' value={formData.email} onChange={handleChange} placeholder='enter you email' />
                     </div>
                     <div className='border rounded-2xl p-2'><input type="password" value={formData.password} onChange={handleChange} autoComplete='curront-password' name="password" className='outline-none' placeholder='enter you password' /></div>
-                    <div className='border rounded-2xl bg-[rgb(0,128,128)] text-xl p-2 text-center'>
+                    <div className='border rounded-2xl bg-[rgb(0,128,128)] text-xl p-2 text-center text-white'>
                         <button>Accountant Login</button>
                     </div>
                     <Link to='/accountantsignup'>

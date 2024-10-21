@@ -11,7 +11,6 @@ const AdminLogin = () => {
     const navigate = useNavigate()
     const handleChange = (e) => {
         setformData({ ...formData, [e.target.name]: e.target.value })
-        console.log(formData)
     }
 
     const handleSubmit = async (e) => {
@@ -45,7 +44,7 @@ const AdminLogin = () => {
                     <div className='border rounded-2xl p-2'>
                         <input type="password" placeholder='enter your password' onChange={handleChange} value={formData.password} name="password" className='outline-none' />
                     </div>
-                    <div className='border rounded-2xl p-2 text-center bg-[rgb(0,128,128)] text-2xl'>
+                    <div className='border rounded-2xl p-2 text-center bg-[rgb(0,128,128)] text-2xl text-white'>
                         <button type='submit'>AdminLogin</button>
                     </div>
                     <Link to='/adminsignup'>

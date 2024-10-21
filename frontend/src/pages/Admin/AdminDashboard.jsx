@@ -34,7 +34,7 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-      fetchImages();
+    fetchImages();
   }, []);
 
 
@@ -50,10 +50,47 @@ const AdminDashboard = () => {
     </div>
   );
 
+
+  // image status counting 
+  const PODone = images.filter(image => image.POstatus === 'Done').length
+  const POPending = images.length - PODone
+  const AccountantDone = images.filter(image => image.Accountantstatus === 'Done').length
+  const AccountantPending = images.length - AccountantDone
   return (
-    <div className='bg-[rgb(1,1,1)] min-h-screen w-full text-white'>
-      <h1 className='text-center text-2xl text-white mb-4'>Admin Dashboard</h1>
-      <div className='w-full h-full px-5'>
+    <div className='bg-[rgb(1,1,1)] min-h-screen w-full text-white mt-10'>
+      <h1 className='text-center text-3xl text-white mb-4 font-bold font-serif'>Admin Dashboard</h1>
+      {/* image count ✅✅ */}
+      <div className=' flex justify-between px-4 font-serif'>
+        <div className='flex flex-col gap-6'>
+          <div>
+            <span className='bg-[rgb(142,39,39)] border rounded-lg py-2 px-1'>
+              POPendingTask:
+            </span>
+            <span className='border px-2 py-1 mx-2 rounded bg-[rgb(117,34,34)]'>{POPending}</span>
+          </div>
+          <div>
+            <span className='bg-[rgb(11,82,37)] border rounded-lg py-2 px-1'>
+              PODoneTask:
+            </span>
+            <span className='border px-2 py-1 mx-6 rounded bg-[rgb(11,82,37)]'>{PODone}</span></div>
+        </div>
+        <div className='flex flex-col gap-6'>
+          <div>
+            <span className='bg-[rgb(142,39,39)] border rounded-lg py-2 px-1'>
+              AccountantPendingTask:
+            </span>
+            <span className='border px-2 py-1 mx-2 rounded bg-[rgb(142,39,39)]'>{AccountantPending}</span></div>
+          <div>
+            <span className='bg-[rgb(11,82,37)] border rounded-lg py-2 px-1'>
+              AccountantDoneTask:
+            </span>
+            <span className='border px-2 py-1 mx-6 rounded bg-[rgb(11,82,37)]'>{AccountantDone}</span></div>
+        </div>
+      </div>
+
+
+      <div className='text-white px-7 py-5 text-center'><span className='font-serif border rounded-lg px-2 py-2 bg-[rgb(193,117,45)]'>ImageCount:</span> <span className='border p-1 rounded bg-[rgb(193,117,45)]'>{images.length}</span></div>
+      <div className='w-full h-full px-5 mt-4'>
         <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
           <div>Username</div>
           <div>Email</div>

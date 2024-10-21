@@ -44,7 +44,7 @@ const AdminSignup = () => {
                     <div className='border rounded-2xl p-2'>
                         <input type="password" placeholder='enter your adminRegistrationToken' onChange={handleChange} value={formData.adminRegistrationToken} name="adminRegistrationToken" className='outline-none' />
                     </div>
-                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-2xl p-1'>
+                    <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-2xl p-1 text-white'>
                         <button type='submit'>AdminSignup</button>
                     </div>
                     <Link to='/adminlogin'>
