@@ -1,19 +1,12 @@
 import multer from 'multer';
 import path from 'path';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-// Define __filename and __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 // Configure multer storage😂🥰😎😐😃✅
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
 
         // get images from localStorage✅
-        cb(null, path.join(__dirname, 'public/temp'));
+        cb(null, './public/temp');
     },
     filename: function (req, file, cb) {
 
