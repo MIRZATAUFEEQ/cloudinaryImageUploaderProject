@@ -8,20 +8,29 @@ const PoAdminDashboard = () => {
   const [POstatuses, setPOStatuses] = useState([]);
   const [filter, setFilter] = useState({ POstatus: 'All' });
 
-
+  // Fetch images when component mounts or filter changes
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        // First fetch all images
+        // Log the current filter state
+        console.log('Fetching images with filter:', filter.POstatus);
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError('Authentication failed. Token is missing.');
+          return;
+        }
+
+        // Fetch all images from the API
         const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,  // Use token for authorization
           },
         });
 
         console.log('Raw response data:', response.data);
 
-        // Apply filtering based on selected filter
+        // Filter images based on POstatus
         let filteredImages;
         if (filter.POstatus === 'All') {
           filteredImages = response.data;
@@ -51,6 +60,7 @@ const PoAdminDashboard = () => {
     fetchImages();
   }, [filter]);
 
+  // Handle click to update PO status
   const handleClick = async (index, imageId) => {
     try {
       const POcompletedAt = new Date().toISOString();
@@ -89,6 +99,7 @@ const PoAdminDashboard = () => {
     }
   };
 
+  // Handle filter change
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     console.log('Filter changed:', { [name]: value });
@@ -107,11 +118,11 @@ const PoAdminDashboard = () => {
     </div>
   );
 
-
   return (
     <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
       <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>PO Dashboard</h1>
       <div className='text-white px-7 py-5 font-serif'>ImageCount: <span className='border p-1 rounded'>{images.length}</span></div>
+      
       <div className='py-5 px-5'>
         <label htmlFor="POstatus" className='px-2 text-white'>Filter by PO Status:</label>
         <select
@@ -141,8 +152,8 @@ const PoAdminDashboard = () => {
         ) : (
           images.map((image, index) => (
             <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b text-white'>
-              <div>{image.user.username}</div>
-              <div>{image.user.email}</div>
+              <div>{image.user?.username || 'Username not found'}</div>
+              <div>{image.user?.email || 'Email not found'}</div>
               <div>
                 <img
                   src={image.path}
@@ -175,6 +186,5 @@ const PoAdminDashboard = () => {
     </div>
   );
 };
-
 
 export default PoAdminDashboard;
