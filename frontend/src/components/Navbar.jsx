@@ -26,6 +26,16 @@ const Navbar = () => {
             <div className='w-full bg-[rgb(0,128,128)] text-white text-xl font-serif'>
                 <div className='flex justify-center items-center gap-10'>
                     <nav className='flex gap-10 items-center py-3'>
+                        <Link to='/pologin'>
+                            <li className='list-none hover:cursor-pointer'>POLogin</li>
+                        </Link>
+                        <Link to='/accountantlogin'>
+                            <li className='list-none hover:cursor-pointer'>AccountantLogin</li>
+                        </Link>
+                        <Link to='/adminlogin'>
+                            <li className='list-none hover:cursor-pointer'>AdminLogin</li>
+                        </Link>
+
                         <Link to='/'>
                             <li className='list-none hover:cursor-pointer'>Login</li>
                         </Link>
