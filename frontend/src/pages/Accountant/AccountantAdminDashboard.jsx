@@ -18,7 +18,6 @@ const AccountantAdminDashboard = () => {
                     }
                 });
 
-
                 // Apply filtering based on selected filter
                 let filteredImages;
                 if (filter.Accountantstatus === 'All') {
@@ -139,8 +138,8 @@ const AccountantAdminDashboard = () => {
                 ) : (
                     images.map((image, index) => (
                         <div key={image._id} className='grid grid-cols-2 md:grid-cols-7 gap-4 py-5 border-b text-white'>
-                            <div>{image.user.username}</div>
-                            <div>{image.user.email}</div>
+                            <div>{image.user?.username || 'Unknown User'}</div> {/* Added null check */}
+                            <div>{image.user?.email || 'Unknown Email'}</div>  {/* Added null check */}
                             <div>
                                 <img
                                     src={image.path}
