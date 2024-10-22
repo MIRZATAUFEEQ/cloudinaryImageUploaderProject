@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
 
         // get images from localStorage✅
-        cb(null, './public/temp');
+        cb(null, path.join(__dirname, 'public/temp'));
     },
     filename: function (req, file, cb) {
 
