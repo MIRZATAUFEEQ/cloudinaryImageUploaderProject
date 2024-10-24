@@ -158,8 +158,7 @@ const AdminDashboard = () => {
             </div>
             <div>
               {image.GRNtimeTaken
-                ? `${image.GRNtimeTaken} minute`
-                : 'Not Available Yet'}
+                ? image.GRNtimeTaken:'Not Available Yet'}
             </div>
             <div>
               {image.GRNnumber ? image.GRNnumber : 'Not Available Yet'}
@@ -167,10 +166,7 @@ const AdminDashboard = () => {
 
             <div>
               {image.AccountantTimeTaken ?
-                image.AccountantTimeTaken < 1 ?
-                  'Less than one minute'
-                  : `${image.AccountantTimeTaken} minute`
-                : 'Not Available'}
+                image.AccountantTimeTaken:'Not Available Yet'}
             </div>
           </div>
         ))}
