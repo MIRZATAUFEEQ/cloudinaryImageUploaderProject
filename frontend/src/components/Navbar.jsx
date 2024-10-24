@@ -56,11 +56,9 @@ const Navbar = () => {
                     <li className='list-none hover:cursor-pointer'>AdminLogin</li>
                 </Link>
                 <Link to='/'>
-                    <li className='list-none hover:cursor-pointer'>Login</li>
+                    <li className='list-none hover:cursor-pointer'>UserLogin</li>
                 </Link>
-                <Link to='/registeruser'>
-                    <li className='list-none hover:cursor-pointer'>Signup</li>
-                </Link>
+              
                 <li className='list-none hover:cursor-pointer'>
                     <button onClick={handleLogout}>Logout</button>
                 </li>

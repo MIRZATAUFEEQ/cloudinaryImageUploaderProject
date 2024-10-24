@@ -62,7 +62,7 @@ const Login = () => {
                         </button>
                     </div>
                     <Link to='/registeruser'>
-                        <li className='list-none text-gray-500'>Don't have account</li>
+                        <li className='list-none text-gray-500'>SignUp as a User</li>
                     </Link>
                 </form>
             </div>

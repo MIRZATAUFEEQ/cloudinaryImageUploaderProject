@@ -42,7 +42,7 @@ const GrnSignup = () => {
                         <input type="password" placeholder='enter your password' onChange={handleChange} value={formData.password} name="password" className='outline-none' />
                     </div>
                     <div className='border rounded-2xl p-2'>
-                        <input type="password" placeholder='enter your adminRegistrationToken' onChange={handleChange} value={formData.adminRegistrationToken} name="adminRegistrationToken" className='outline-none' />
+                        <input type="password" placeholder='enter secretKey' onChange={handleChange} value={formData.adminRegistrationToken} name="adminRegistrationToken" className='outline-none' />
                     </div>
                     <div className='border text-center rounded-2xl bg-[rgb(0,128,128)] text-2xl p-1 text-white'>
                         <button type='submit'>GRNSignup</button>

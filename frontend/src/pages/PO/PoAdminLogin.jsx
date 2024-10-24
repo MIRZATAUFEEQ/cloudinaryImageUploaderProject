@@ -64,7 +64,7 @@ const PoAdminLogin = () => {
                         </button>
                     </div>
                     <Link to='/posignup'>
-                        <li className='list-none text-gray-500'>Don't have account</li>
+                        <li className='list-none text-gray-500'>SignUp as a PO</li>
                     </Link>
                 </form>
             </div>

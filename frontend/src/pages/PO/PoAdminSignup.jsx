@@ -74,7 +74,7 @@ const PoAdminSignup = () => {
                             name="adminRegistrationToken"
                             value={formData.adminRegistrationToken}
                             className='outline-none'
-                            placeholder='Enter your adminRegistrationToken'
+                            placeholder='Enter secretKey'
                             onChange={handleChange}
                             autoComplete='adminRegistrationToken'
 
