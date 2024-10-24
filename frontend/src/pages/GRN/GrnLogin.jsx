@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-const AdminLogin = () => {
+const GrnLogin = () => {
     const [formData, setformData] = useState({
         email: '',
         password: ''
@@ -21,11 +21,11 @@ const AdminLogin = () => {
 
             if (isAdmin) {
                 localStorage.setItem('token', token)
-                alert('admin login successfully')
-                navigate('/admindashboard')
+                alert('GRN login successfully')
+                navigate('/grndashboard')
             }
             else {
-                console.log('Access denied, you are not admin')
+                console.log('Access denied, you are not GRN')
             }
         } catch (error) {
             // alert(error.response?.data || 'Error logging in as admin');
@@ -45,10 +45,10 @@ const AdminLogin = () => {
                         <input type="password" placeholder='enter your password' onChange={handleChange} value={formData.password} name="password" className='outline-none' />
                     </div>
                     <div className='border rounded-2xl p-2 text-center bg-[rgb(0,128,128)] text-2xl text-white'>
-                        <button type='submit'>AdminLogin</button>
+                        <button type='submit'>GRNLogin</button>
                     </div>
-                    <Link to='/adminsignup'>
-                        <li className='list-none text-gray-500'>Signup as a admin</li>
+                    <Link to='/grnsignup'>
+                        <li className='list-none text-gray-500'>Signup as a GRN</li>
                     </Link>
                 </form>
             </div>
@@ -56,4 +56,4 @@ const AdminLogin = () => {
     )
 }
 
-export default AdminLogin
+export default GrnLogin

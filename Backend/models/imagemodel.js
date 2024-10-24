@@ -5,27 +5,43 @@ let imageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
     path: {
         type: String,
         required: true
     },
+
     contentType: {
         type: String,
         required: true,
     },
+
     size: {
         type: Number,
         required: true,
     },
+
     username: {
-        type: String, required: true
+        type: String,
+        required: true,
     },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
 
+    stamp: {
+        type: Boolean,
+        default: false,
+    },
+
+
     // Add POStatus and POCompletedAt fields✅
+    POnumber: {
+        type: String,
+        default: ''
+    },
     POstatus: {
         type: String,
         // enum: ['Done', 'Pending'],
@@ -35,6 +51,11 @@ let imageSchema = new mongoose.Schema({
     POcompletedAt: {
         type: Date,
     },
+    POtimeTaken: {
+        type: String,
+        default: '',
+    },
+
 
     // Add Accountantstatus and AccountantcompletedAt fields✅
     Accountantstatus: {
@@ -44,19 +65,33 @@ let imageSchema = new mongoose.Schema({
     AccountantcompletedAt: {
         type: Date
     },
-    POtimeTaken: {
-        type: Number,
-        default: null,
-    },
     AccountantTimeTaken: {
-        type: Number,
-        default: null
+        type: String,
+        default: ''
+    },
+
+
+    // start grn data here 
+    GRNnumber: {
+        type: String,
+        default: ''
+    },
+    GRNstatus: {
+        type: String,
+        default: 'Pending'
+    },
+    GRNcompletedAt: {
+        type: Date,
+    },
+    GRNtimeTaken: {
+        type: String,
+        default: ''
     }
 
 
 }, { timestamps: true })
 
-imageSchema.index({ user: 1, POstatus: 1 });
+// imageSchema.index({ user: 1, POstatus: 1 });
 
 const Image = mongoose.model('Image', imageSchema)
 export default Image

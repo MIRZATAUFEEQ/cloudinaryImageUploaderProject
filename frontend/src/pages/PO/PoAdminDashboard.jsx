@@ -7,30 +7,24 @@ const PoAdminDashboard = () => {
   const [error, setError] = useState('');
   const [POstatuses, setPOStatuses] = useState([]);
   const [filter, setFilter] = useState({ POstatus: 'All' });
+  const [formData, setFormData] = useState([]); // Initialize as an array
 
   // Fetch images when component mounts or filter changes
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        // Log the current filter state
-        console.log('Fetching images with filter:', filter.POstatus);
-
         const token = localStorage.getItem('token');
         if (!token) {
           setError('Authentication failed. Token is missing.');
           return;
         }
 
-        // Fetch all images from the API
         const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images`, {
           headers: {
-            Authorization: `Bearer ${token}`,  // Use token for authorization
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        console.log('Raw response data:', response.data);
-
-        // Filter images based on POstatus
         let filteredImages;
         if (filter.POstatus === 'All') {
           filteredImages = response.data;
@@ -40,8 +34,13 @@ const PoAdminDashboard = () => {
           filteredImages = response.data.filter(image => image.POstatus !== 'Done');
         }
 
-        console.log('Filtered Images:', filteredImages);
         setImages(filteredImages);
+
+        // Initialize formData with PO numbers
+        const initialFormData = filteredImages.map(image => ({
+          POnumber: '', // Start with empty PO numbers
+        }));
+        setFormData(initialFormData);
 
         // Update statuses
         const newPOStatuses = filteredImages.map(image =>
@@ -65,9 +64,15 @@ const PoAdminDashboard = () => {
     try {
       const POcompletedAt = new Date().toISOString();
 
+      if (!formData[index]?.POnumber) {
+        alert('Please enter a PO number before updating the status.');
+        return;
+      }
+
       await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
         POstatus: 'Done',
         POcompletedAt,
+        POnumber: formData[index].POnumber // Use the specific PO number
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -75,11 +80,10 @@ const PoAdminDashboard = () => {
       });
 
       if (filter.POstatus === 'Pending') {
-        // If we're in pending filter, remove the item
         setImages(prev => prev.filter((_, i) => i !== index));
         setPOStatuses(prev => prev.filter((_, i) => i !== index));
+        setFormData(prev => prev.filter((_, i) => i !== index)); // Also remove the form data for this index
       } else {
-        // Update the status
         const newPOStatuses = [...POstatuses];
         newPOStatuses[index] = 'Done';
         setPOStatuses(newPOStatuses);
@@ -88,7 +92,8 @@ const PoAdminDashboard = () => {
         updatedImages[index] = {
           ...updatedImages[index],
           POstatus: 'Done',
-          POcompletedAt
+          POcompletedAt,
+          POnumber: formData[index].POnumber
         };
         setImages(updatedImages);
       }
@@ -102,7 +107,6 @@ const PoAdminDashboard = () => {
   // Handle filter change
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    console.log('Filter changed:', { [name]: value });
     setFilter((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -118,11 +122,21 @@ const PoAdminDashboard = () => {
     </div>
   );
 
+  const handleChange = (index, e) => {
+    const { value } = e.target;
+    // Update the specific formData index for the current image
+    setFormData(prev => {
+      const newFormData = [...prev];
+      newFormData[index] = { POnumber: value }; // Update only the corresponding POnumber
+      return newFormData;
+    });
+  };
+
   return (
     <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
       <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>PO Dashboard</h1>
       <div className='text-white px-7 py-5 font-serif'>ImageCount: <span className='border p-1 rounded'>{images.length}</span></div>
-      
+
       <div className='py-5 px-5'>
         <label htmlFor="POstatus" className='px-2 text-white'>Filter by PO Status:</label>
         <select
@@ -138,11 +152,12 @@ const PoAdminDashboard = () => {
       </div>
 
       <div className='w-full h-full px-5'>
-        <div className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b'>
+        <div id='header' className='sticky top-0 grid grid-cols-2 md:grid-cols-7 gap-4 py-5 border-b bg-[rgb(173,97,25)] z-10'>
           <div><h3 className='text-white'>Username</h3></div>
           <div><h3 className='text-white'>Email</h3></div>
           <div><h3 className='text-white'>Images</h3></div>
           <div><h3 className='text-white'>Created At</h3></div>
+          <div><h3 className='text-white'>PO no.</h3></div>
           <div><h3 className='text-white'>PO Completed At</h3></div>
           <div><h3 className='text-white'>PO Status</h3></div>
         </div>
@@ -151,7 +166,7 @@ const PoAdminDashboard = () => {
           <div className='text-white text-center py-4'>No images found for the selected filter.</div>
         ) : (
           images.map((image, index) => (
-            <div key={image._id} className='grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b text-white'>
+            <div key={image._id} className='grid grid-cols-2 md:grid-cols-7 gap-4 py-5 border-b text-white'>
               <div>{image.user?.username || 'Username not found'}</div>
               <div>{image.user?.email || 'Email not found'}</div>
               <div>
@@ -159,10 +174,20 @@ const PoAdminDashboard = () => {
                   src={image.path}
                   alt={image.filename}
                   onDoubleClick={() => window.open(image.path, '_blank')}
-                  className='w-24 h-auto rounded-md cursor-pointer hover:opacity-80 transition-opacity'
+                  className='h-[3rem] w-[4rem] rounded-md cursor-pointer hover:opacity-80 transition-opacity'
                 />
               </div>
               <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
+              <div>
+                <input
+                  type="text"
+                  name='POnumber'
+                  onChange={(e) => handleChange(index, e)} // Pass index to handleChange
+                  value={formData[index]?.POnumber || ''} // Use the specific POnumber
+                  placeholder='enter PO no.'
+                  className='w-[7rem] text-black outline-none px-1 rounded-md'
+                />
+              </div>
               <div>
                 {image.POcompletedAt
                   ? new Date(image.POcompletedAt).toLocaleString()

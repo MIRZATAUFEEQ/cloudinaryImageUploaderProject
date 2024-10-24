@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const AccountantAdminDashboard = () => {
+const GrnDashboard = () => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [accountantStatuses, setAccountantStatuses] = useState([]);
-    const [filter, setFilter] = useState({ Accountantstatus: 'All' });
-    const [stampstatus, setstampstatus] = useState({})
+    const [GRNStatuses, setGRNStatuses] = useState([]);
+    const [filter, setFilter] = useState({ GRNstatus: 'All' }); // Updated filter state
+    const [formData, setFormData] = useState([]);
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
-
                 const token = localStorage.getItem('token');
                 if (!token) {
                     setError('Authentication failed. Token is missing.');
                     return;
                 }
+
                 // Fetch all images
                 const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images`, {
                     headers: {
@@ -25,28 +25,37 @@ const AccountantAdminDashboard = () => {
                     }
                 });
 
+                console.log(response.data);
+
+                // Ensure response.data is an array
+                if (!Array.isArray(response.data)) {
+                    setError('Unexpected response format');
+                    return;
+                }
+
                 // Apply filtering based on selected filter
                 let filteredImages;
-                if (filter.Accountantstatus === 'All') {
+                if (filter.GRNstatus === 'All') {
                     filteredImages = response.data;
-                } else if (filter.Accountantstatus === 'Done') {
-                    filteredImages = response.data.filter(image => image.Accountantstatus === 'Done');
-                } else if (filter.Accountantstatus === 'Pending') {
-                    filteredImages = response.data.filter(image => image.Accountantstatus !== 'Done');
+                } else if (filter.GRNstatus === 'Done') {
+                    filteredImages = response.data.filter(image => image.GRNstatus === 'Done');
+                } else if (filter.GRNstatus === 'Pending') {
+                    filteredImages = response.data.filter(image => image.GRNstatus !== 'Done');
                 }
 
                 setImages(filteredImages);
 
-                // Update statuses
-                const newAccountantStatuses = filteredImages.map(image =>
-                    image.Accountantstatus === 'Done' ? 'Done' : 'Pending'
+                // Initialize formData for GRNnumber
+                const initialFormData = filteredImages.map(image => ({
+                    GRNnumber: '', // Assuming it's empty by default
+                }));
+                setFormData(initialFormData);
+
+                // Update GRN statuses
+                const newGRNStatuses = filteredImages.map(image =>
+                    image.GRNstatus === 'Done' ? 'Done' : 'Pending'
                 );
-                setAccountantStatuses(newAccountantStatuses);
-                const newStampStatus = filteredImages.reduce((acc, image) => {
-                    acc[image._id] = image.stamp || false; // Set the checkbox based on the fetched 'stamp' field
-                    return acc;
-                }, {});
-                setstampstatus(newStampStatus);
+                setGRNStatuses(newGRNStatuses);
 
             } catch (err) {
                 console.error('Error details:', err.response?.data || err.message);
@@ -60,53 +69,66 @@ const AccountantAdminDashboard = () => {
 
     }, [filter]);
 
-    const handleAccountantClick = async (index, imageId) => {
+    const handleGRNClick = async (index, imageId) => {
         try {
-            const AccountantcompletedAt = new Date().toISOString();
-            const stamp = stampstatus[imageId]
-            if (!stamp) {
-                alert('please check on checkbox before updating your status')
-                return
+            const GRNcompletedAt = new Date().toISOString();
+
+            if (!formData[index]?.GRNnumber) {
+                alert('Please enter GRN number before updating the status.');
+                return;
             }
+
             await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
-                Accountantstatus: 'Done',
-                AccountantcompletedAt,
-                stamp: stamp
+                GRNstatus: 'Done',
+                GRNcompletedAt,
+                GRNnumber: formData[index].GRNnumber
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(stamp)
-            if (filter.Accountantstatus === 'Pending') {
+
+            if (filter.GRNstatus === 'Pending') {
                 // If we're in pending filter, remove the item
                 setImages(prev => prev.filter((_, i) => i !== index));
-                setAccountantStatuses(prev => prev.filter((_, i) => i !== index));
+                setGRNStatuses(prev => prev.filter((_, i) => i !== index));
+                setFormData(prev => prev.filter((_, i) => i !== index));
             } else {
                 // Update the status
-                const newAccountantStatuses = [...accountantStatuses];
-                newAccountantStatuses[index] = 'Done';
-                setAccountantStatuses(newAccountantStatuses);
+                const newGRNStatuses = [...GRNStatuses];
+                newGRNStatuses[index] = 'Done';
+                setGRNStatuses(newGRNStatuses);
 
                 const updatedImages = [...images];
                 updatedImages[index] = {
                     ...updatedImages[index],
-                    Accountantstatus: 'Done',
-                    AccountantcompletedAt,
-                    stamp: stamp
+                    GRNstatus: 'Done',
+                    GRNcompletedAt,
+                    GRNnumber: formData[index].GRNnumber
                 };
                 setImages(updatedImages);
             }
 
         } catch (error) {
-            console.error('Failed to update AccountantStatus:', error);
+            console.error('Failed to update GRNStatus:', error);
             alert('Failed to update status. Please try again.');
         }
     };
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilter(prev => ({ ...prev, [name]: value }));
+        console.log('Filter changed:', { [name]: value });
+        setFilter((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleChange = (index, e) => {
+        const { value } = e.target;
+        // Update the specific formData index for the current image
+        setFormData(prev => {
+            const newFormData = [...prev];
+            newFormData[index] = { GRNnumber: value }; // Update only the corresponding GRNnumber
+            return newFormData;
+        });
     };
 
     if (loading) return (
@@ -121,22 +143,15 @@ const AccountantAdminDashboard = () => {
         </div>
     );
 
-    const handleChange = (imageId) => {
-        setstampstatus(prev => ({
-            ...prev,
-            [imageId]: !prev[imageId] // Toggle the stamp state
-        }));
-    };
-
     return (
         <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
-            <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>Accountant Dashboard</h1>
+            <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>GRN Dashboard</h1>
             <div className='text-white px-7 py-5 font-serif'>ImageCount: <span className='border p-1 rounded'>{images.length}</span></div>
             <div className='py-5 px-5'>
-                <label htmlFor="Accountantstatus" className='px-2 text-white'>Filter by Status:</label>
+                <label htmlFor="GRNstatus" className='px-2 text-white'>Filter by Status:</label>
                 <select
-                    name="Accountantstatus"
-                    value={filter.Accountantstatus}
+                    name="GRNstatus"
+                    value={filter.GRNstatus}
                     onChange={handleFilterChange}
                     className="rounded-md px-2 py-1"
                 >
@@ -152,10 +167,10 @@ const AccountantAdminDashboard = () => {
                     <div><h3 className='text-white'>Email</h3></div>
                     <div><h3 className='text-white'>Images</h3></div>
                     <div><h3 className='text-white'>Created At</h3></div>
+                    <div><h3 className='text-white'>PO no.</h3></div>
                     <div><h3 className='text-white'>GRN no.</h3></div>
-                    <div><h3 className='text-white'>Verify</h3></div>
-                    <div><h3 className='text-white'>Accountant Completed At</h3></div>
-                    <div><h3 className='text-white'>Accountant Status</h3></div>
+                    <div><h3 className='text-white'>GRN CompletedAt</h3></div>
+                    <div><h3 className='text-white'>GRN Status</h3></div>
                 </div>
 
                 {images.length === 0 ? (
@@ -174,33 +189,29 @@ const AccountantAdminDashboard = () => {
                                 />
                             </div>
                             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
-                            <div>
-                                {image.GRNnumber}
-                            </div>
+                            <div>{image.POnumber}</div>
                             <div>
                                 <input
-                                    type="checkbox"
-                                    name="stamp"
-                                    checked={stampstatus[image._id] || false} // Correctly set the checked state
-                                    onChange={(e) => handleChange(image._id)}
-                                /> <span>Stamp</span>
-
+                                    type="text"
+                                    name="GRNnumber"
+                                    onChange={(e) => handleChange(index, e)}  // Pass index here
+                                    placeholder='enter GRN no.'
+                                    className='w-[7rem] text-black outline-none px-1 rounded-md'
+                                />
                             </div>
                             <div>
-                                {image.AccountantcompletedAt
-                                    ? new Date(image.AccountantcompletedAt).toLocaleString()
-                                    : 'Not Completed Yet'}
+                                {image.GRNcompletedAt ? new Date(image.GRNcompletedAt).toLocaleString (): 'Not Completed Yet'}
                             </div>
                             <button
                                 className={`border h-[2rem] px-6 rounded-xl 
-                                    ${accountantStatuses[index] === 'Done'
+                                    ${GRNStatuses[index] === 'Done'
                                         ? 'bg-green-600 opacity-50 cursor-not-allowed'
                                         : 'bg-[rgb(173,97,25)] hover:bg-[rgb(193,117,45)]'} 
                                     text-white shadow-lg hover:shadow-xl transition-all duration-300`}
-                                onClick={() => handleAccountantClick(index, image._id)}
-                                disabled={accountantStatuses[index] === 'Done'}
+                                onClick={() => handleGRNClick(index, image._id)}
+                                disabled={GRNStatuses[index] === 'Done'}
                             >
-                                {accountantStatuses[index]}
+                                {GRNStatuses[index]}
                             </button>
                         </div>
                     ))
@@ -210,4 +221,4 @@ const AccountantAdminDashboard = () => {
     );
 };
 
-export default AccountantAdminDashboard;
+export default GrnDashboard;

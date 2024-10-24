@@ -14,6 +14,9 @@ import AccountantAdminDashboard from './pages/Accountant/AccountantAdminDashboar
 import AdminSignup from './pages/Admin/AdminSignup'
 import AdminLogin from './pages/Admin/AdminLogin'
 import AdminDashboard from './pages/Admin/AdminDashboard'
+import GrnSignup from './pages/GRN/GrnSignup'
+import GrnLogin from './pages/GRN/GrnLogin'
+import GrnDashboard from './pages/GRN/GrnDashboard'
 
 
 const App = () => {
@@ -30,6 +33,12 @@ const App = () => {
             <Route exact path='/posignup' element={<PoAdminSignup />} />
             <Route exact path='/pologin' element={<PoAdminLogin />} />
             <Route exact path='/podashboard' element={<PoAdminDashbord />} />
+
+            {/* GRN route  */}
+            <Route exact path='/grnsignup' element={<GrnSignup />} />
+            <Route exact path='/grnlogin' element={<GrnLogin />} />
+            <Route exact path='/grndashboard' element={<GrnDashboard />} />
+
             <Route exact path='/accountantsignup' element={<AccountantAdminSignup />} />
             <Route exact path='/accountantlogin' element={<AccountantAdminLogin />} />
             <Route exact path='/accountantdashboard' element={<AccountantAdminDashboard />} />

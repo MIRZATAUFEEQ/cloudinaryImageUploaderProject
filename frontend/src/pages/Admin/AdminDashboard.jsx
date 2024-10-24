@@ -5,7 +5,6 @@ const AdminDashboard = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  // const [POstatuses, setPOStatuses] = useState([]);
   const [accountantStatuses, setAccountantStatuses] = useState([]); // New state for AccountantStatus
   const [accountantCompletedAt, setAccountantCompletedAt] = useState([]); // New state for AccountantCompletedAt
 
@@ -118,22 +117,23 @@ const AdminDashboard = () => {
         </span>
       </div>
       <div className="w-full h-full px-5 mt-4">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b">
+        <div id='header' className="grid grid-cols-2 md:grid-cols-8 gap-4 py-5 border-b font-bold bg-[rgb(173,97,25)] sticky top-0 z-10">
           <div>Username</div>
-          <div>Email</div>
           <div>Images</div>
           <div>Created At</div>
           <div>PO Time Taken</div>
+          <div>PO no.</div>
+          <div>GRN Time Taken</div>
+          <div>GRN no.</div>
           <div>Accountant Time Taken</div>
         </div>
 
         {images.map((image, index) => (
           <div
             key={image._id}
-            className="grid grid-cols-2 md:grid-cols-6 gap-4 py-5 border-b"
+            className="grid grid-cols-2 md:grid-cols-8 gap-4 py-5 border-b"
           >
             <div>{image.user?.username || 'Unknown User'}</div>
-            <div>{image.user?.email || 'Unknown Email'}</div>
             <div>
               <img
                 src={image.path}
@@ -150,13 +150,26 @@ const AdminDashboard = () => {
 
             <div>
               {image.POtimeTaken
-                ? `${image.POtimeTaken} minute`
-                : 'Not Available'}
+                ? `${image.POtimeTaken}`
+                : 'Not Available Yet'}
+            </div>
+            <div>
+              {image.POnumber ? image.POnumber : 'Not Available Yet'}
+            </div>
+            <div>
+              {image.GRNtimeTaken
+                ? `${image.GRNtimeTaken} minute`
+                : 'Not Available Yet'}
+            </div>
+            <div>
+              {image.GRNnumber ? image.GRNnumber : 'Not Available Yet'}
             </div>
 
             <div>
-              {image.AccountantTimeTaken
-                ? `${image.AccountantTimeTaken} minute`
+              {image.AccountantTimeTaken ?
+                image.AccountantTimeTaken < 1 ?
+                  'Less than one minute'
+                  : `${image.AccountantTimeTaken} minute`
                 : 'Not Available'}
             </div>
           </div>

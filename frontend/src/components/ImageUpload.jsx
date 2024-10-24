@@ -61,6 +61,7 @@ const ImageUpload = () => {
 
             // uploade image in url form in database
             setUploadedUrl(response.data.imageUrl);
+            console.log(response.data)
             alert('Your image has been successfully uploaded');
 
         } catch (error) {

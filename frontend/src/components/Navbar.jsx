@@ -46,6 +46,9 @@ const Navbar = () => {
                 <Link to='/pologin'>
                     <li className='list-none hover:cursor-pointer'>POLogin</li>
                 </Link>
+                <Link to='/grnlogin'>
+                    <li className='list-none hover:cursor-pointer'>GRNlogin</li>
+                </Link>
                 <Link to='/accountantlogin'>
                     <li className='list-none hover:cursor-pointer'>AccountantLogin</li>
                 </Link>
