@@ -24,7 +24,7 @@ const upload = multer({
     // uploadImages in cloudinary✅
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|pdf|docx/; // Allowed file types which type you want to upload✅
+        const filetypes = /jpeg|jpg|png|pdf/; // Allowed file types which type you want to upload✅
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());//filename
 
