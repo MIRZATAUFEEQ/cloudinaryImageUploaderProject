@@ -15,6 +15,8 @@ const port = process.env.PORT || 5000;
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 //set the limit of image quality size by middleware✅
@@ -32,14 +34,14 @@ app.get('/', (req, res) => {
 
 // running server on port ✅
 connectDB()
-.then(()=>{
-    app.listen(port, () => {
-        console.log(`⚙️  server is running at port http://localhost:${port}`)
+    .then(() => {
+        app.listen(port, () => {
+            console.log(`⚙️  server is running at port http://localhost:${port}`)
+        })
     })
-})
-.catch((err)=>{
-    console.log('db connection failed',err)
-})
+    .catch((err) => {
+        console.log('db connection failed', err)
+    })
 
 
 
