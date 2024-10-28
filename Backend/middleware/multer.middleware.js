@@ -1,37 +1,40 @@
 import multer from 'multer';
 import path from 'path';
 
-// Configure multer storage😂🥰😎😐😃✅
+// Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-
-        // get images from localStorage✅
-        cb(null, './public/temp');
+        cb(null, './public/temp');  // Destination folder
     },
     filename: function (req, file, cb) {
-
-        // giving filename by date and randomnumber✅
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-
-        // fix the filename field in cloudinary✅
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Fix the filename field
-        
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Set the filename
     }
 });
 
-// Create the multer instance with the defined storage✅
+// Create the multer instance with the defined storage
 const upload = multer({
-    // uploadImages in cloudinary✅
     storage: storage,
+    limits: { fileSize: 1024 * 1024 * 10 },  // 10MB limit
     fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif/; // Allowed file types which type you want to upload✅
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());//filename
+        // Allowed file types including images, PDF, and Excel files
+        const allowedFileTypes = [
+            'auto',
+            'image/jpeg',   // JPEG images
+            'image/png',    // PNG images
+            'application/pdf', // PDF files
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+            'application/vnd.ms-excel', // XLS
+            'application/octet-stream' // For generic binary files, can help with some Excel uploads
+        ];
 
-        if (mimetype && extname) {
-            return cb(null, true);
+        console.log('File received:', file.originalname, 'MIME type:', file.mimetype); // Log the file details
+
+        // Allow all file types if allowedFileTypes is empty
+        if (allowedFileTypes.length === 0 || allowedFileTypes.includes(file.mimetype)) {
+            return cb(null, true);  // Accept the file
         }
-        cb(new Error('Error: File type not supported!'));
+        return cb(new Error('Error: File type not supported!'));  // Reject the file
     }
 });
 
