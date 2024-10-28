@@ -4,69 +4,84 @@ import { useNavigate } from 'react-router-dom';
 
 const ImageUpload = () => {
     const [file, setFile] = useState(null);
-    const [image, setImage] = useState('');
+    const [previewContent, setPreviewContent] = useState(''); // To store either the image preview or file name
     const [uploadedUrl, setUploadedUrl] = useState('');
     const navigate = useNavigate();
 
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB in bytes
+
     useEffect(() => {
-        // Check if the user is authenticated✅
+        // Check if the user is authenticated
         const token = localStorage.getItem('token');
         if (!token) {
-            // Redirect to login page if no token is found✅
-            alert('You need to login first to upload images');
+            // Redirect to login page if no token is found
+            alert('You need to login first to upload files');
             navigate('/login');
         }
     }, [navigate]);
 
     const previewFiles = (selectedFile) => {
         const reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
-            setImage(reader.result);
+            if (selectedFile.type.startsWith('image/')) {
+                setPreviewContent(reader.result); // Set image preview
+            } else {
+                setPreviewContent(selectedFile.name); // Set file name for non-image files
+            }
         };
+        if (selectedFile.type.startsWith('image/')) {
+            reader.readAsDataURL(selectedFile); // Read the file for image previews
+        } else {
+            // For non-image files, we don't need to read the file
+            setPreviewContent(selectedFile.name); // Display file name directly
+        }
     };
 
-    // logic for change input tag state✅
+    // Update input tag state logic
     const handleChange = (e) => {
         let selectedFile = e.target.files[0];
         setFile(selectedFile);
         previewFiles(selectedFile);
     };
 
-    // logic for upload image ✅
+    // Logic for uploading files
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // check file is present in input or not 
+        // Check if a file is selected
         if (!file) {
-            return alert('please select an image to upload')
-        };
+            return alert('Please select a file to upload');
+        }
 
-        // create a formdata variable✅
+        // Check file size
+        if (file.size > MAX_FILE_SIZE) {
+            return alert(`File size exceeds the limit of 10 MB. Your file is ${Math.round(file.size / (1024 * 1024))} MB.`);
+        }
+
+        // Create a FormData instance
         const formData = new FormData();
 
-        // add image by append method ✅
-        formData.append('image', file);
+        // Append the file (image, PDF, or Excel) to the FormData instance
+        formData.append('file', file);
 
         try {
-            const token = localStorage.getItem('token');  // Get the token✅
+            const token = localStorage.getItem('token'); // Get the token
 
-            // api call in backend for send images in database✅
+            // API call to backend to upload file
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/upload`, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`,  // Include the token in headers
+                    Authorization: `Bearer ${token}`, // Include the token in headers
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            // uploade image in url form in database
-            setUploadedUrl(response.data.imageUrl);
-            console.log(response.data)
-            alert('Your image has been successfully uploaded');
+            // Uploaded file URL
+            setUploadedUrl(response.data.fileUrl); // Update based on backend response field
+            alert(`Your ${file.type.includes('image') ? 'image' : 'file'} has been successfully uploaded`);
 
         } catch (error) {
-            console.log(error)
-            alert(`Image Upload Failed: ${error}`);
+            console.log(error);
+            alert(`File Upload Failed: ${error}`);
         }
     };
 
@@ -77,10 +92,10 @@ const ImageUpload = () => {
                     <input
                         type="file"
                         onChange={handleChange}
-                        className="bg-[rgb(40,138,171)] w-24 text-center"
+                        className="bg-[rgb(40,138,171)] w-24 text-center text-white"
                         required
                         name='file'
-                        accept="image/png, image/jpg, image/jpeg"
+                        accept="image/png, image/jpg, image/jpeg, application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                     />
                 </div>
                 <div className="bg-[rgb(0,128,128)] w-[10rem] text-[rgb(255,254,254)] font-semibold text-center rounded-full border">
@@ -89,7 +104,16 @@ const ImageUpload = () => {
                     </button>
                 </div>
             </form>
-            {image && <img src={image} alt="Preview" />}
+            {/* Show preview or file name */}
+            <div className="text-white">
+                {file && previewContent && (
+                    file.type.startsWith('image/') ? (
+                        <img src={previewContent} alt='Uploaded file preview' className='h-32' />
+                    ) : (
+                        <p>{previewContent}</p>
+                    )
+                )}
+            </div>
         </div>
     );
 };

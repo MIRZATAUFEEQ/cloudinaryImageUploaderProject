@@ -169,9 +169,13 @@ const AccountantAdminDashboard = () => {
                                 <img
                                     src={image.path}
                                     alt={image.filename}
-                                    onDoubleClick={() => window.open(image.path, '_blank')}
-                                    className='w-24 h-auto rounded-md cursor-pointer hover:opacity-80 transition-opacity'
+                                    onDoubleClick={() => {
+                                        console.log(`Opening image: ${image.path}`);
+                                        window.open(image.path, '_blank');
+                                    }}
+                                    className='h-[3rem] w-[4rem] rounded-md cursor-pointer hover:opacity-80 transition-opacity'
                                 />
+
                             </div>
                             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
                             <div>

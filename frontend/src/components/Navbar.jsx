@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { CgProfile } from 'react-icons/cg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

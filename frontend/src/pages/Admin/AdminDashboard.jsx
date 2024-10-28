@@ -139,7 +139,7 @@ const AdminDashboard = () => {
                 src={image.path}
                 alt={image.filename}
                 onDoubleClick={() => window.open(image.path, '_blank')}
-                className="h-[3rem] w-[4rem] rounded-md"
+                className="h-[3rem] w-[4rem] rounded-md cursor-pointer hover:opacity-80 transition-opacity"
               />
             </div>
             <div>

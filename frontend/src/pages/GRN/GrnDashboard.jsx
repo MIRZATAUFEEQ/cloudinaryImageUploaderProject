@@ -148,7 +148,7 @@ const GrnDashboard = () => {
             <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>GRN Dashboard</h1>
             <div className='text-white px-7 py-5 font-serif'>ImageCount: <span className='border p-1 rounded'>{images.length}</span></div>
             <div className='py-5 px-5'>
-                <label htmlFor="GRNstatus" className='px-2 text-white'>Filter by Status:</label>
+                <label htmlFor="FilterBystatus" className='px-2 text-white'>Filter by Status:</label>
                 <select
                     name="GRNstatus"
                     value={filter.GRNstatus}
@@ -162,7 +162,7 @@ const GrnDashboard = () => {
             </div>
 
             <div className='w-full h-full px-5'>
-                <div className='sticky top-0 grid grid-cols-2 md:grid-cols-8 gap-4 py-5 border-b bg-[rgb(173,97,25)] z-10'>
+                <div id='header' className='sticky top-0 grid grid-cols-2 md:grid-cols-8 gap-4 py-5 border-b bg-[rgb(173,97,25)] z-10'>
                     <div><h3 className='text-white'>Username</h3></div>
                     <div><h3 className='text-white'>Email</h3></div>
                     <div><h3 className='text-white'>Images</h3></div>
@@ -185,7 +185,7 @@ const GrnDashboard = () => {
                                     src={image.path}
                                     alt={image.filename}
                                     onDoubleClick={() => window.open(image.path, '_blank')}
-                                    className='w-24 h-auto rounded-md cursor-pointer hover:opacity-80 transition-opacity'
+                                    className='h-[3rem] w-[4rem] rounded-md cursor-pointer hover:opacity-80 transition-opacity'
                                 />
                             </div>
                             <div>{image.createdAt ? new Date(image.createdAt).toLocaleString() : 'N/A'}</div>
@@ -200,7 +200,7 @@ const GrnDashboard = () => {
                                 />
                             </div>
                             <div>
-                                {image.GRNcompletedAt ? new Date(image.GRNcompletedAt).toLocaleString (): 'Not Completed Yet'}
+                                {image.GRNcompletedAt ? new Date(image.GRNcompletedAt).toLocaleString() : 'Not Completed Yet'}
                             </div>
                             <button
                                 className={`border h-[2rem] px-6 rounded-xl 
