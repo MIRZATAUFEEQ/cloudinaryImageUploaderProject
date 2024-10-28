@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import * as fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Logout from '../models/userlogou.models.js';
+import multer from 'multer'
 
 // Register User API Controller ✅
 export const registerUser = async (req, res) => {
@@ -105,12 +106,17 @@ export const uploadImage = async (req, res) => {
             return res.status(400).send('No file uploaded');
         }
 
-        // Upload the image to Cloudinary and optimize by using eager transformations
+        // Define Cloudinary folder based on file type
+        const folder = req.file.mimetype.startsWith('image/') ? 'user_avatar' : 'user_docs';
+
+        // Upload file to Cloudinary
         const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'user_avatar',
+            folder: folder,
+            upload_preset: 'ml_default',
+            resource_type: req.file.mimetype === 'application/pdf' || req.file.mimetype === 'application/vnd.ms-excel' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? 'raw' : 'image',
         });
 
-
+        // Define new image/document record for database
         const image = new Image({
             filename: req.file.filename,
             path: result.secure_url,
@@ -130,7 +136,7 @@ export const uploadImage = async (req, res) => {
             return res.status(400).send('File not provided');
         }
 
-        // Save the image and update user data asynchronously using Promise.all
+        // Save the image/document and update user data asynchronously
         await Promise.all([
             image.save(),
             fs.unlinkSync(req.file.path),
@@ -142,8 +148,8 @@ export const uploadImage = async (req, res) => {
 
         // Send response to client
         res.status(201).send({
-            message: 'Image uploaded successfully',
-            imageUrl: result.secure_url,
+            message: 'File uploaded successfully',
+            fileUrl: result.secure_url,
             username: user.username,
             uploadedImages: user.uploadedImages,
             imageCount: user.imageCount,
@@ -152,8 +158,14 @@ export const uploadImage = async (req, res) => {
     } catch (error) {
         // Remove file from local storage if an error occurs
         fs.unlinkSync(req.file.path);
-        console.error('Error uploading image', error);
-        res.status(500).send('Error uploading image');
+        console.error('Error uploading file', error);
+        // Handle specific multer errors
+        if (error instanceof multer.MulterError) {
+            if (error.code === 'LIMIT_FILE_SIZE') {
+                return res.status(400).send('File size exceeds the limit!');
+            }
+        }
+        res.status(500).send('Error uploading file');
     }
 };
 
