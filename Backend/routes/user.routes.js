@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/registeruser', registerUser); // Register route✅
 router.post('/loginuser', loginUser);       // Login route✅
 router.post('/logout', protect, logoutUser);
-router.post('/upload', protect, upload.single('image'), uploadImage); // image upload route✅
+router.post('/upload', protect, upload.single('file'), uploadImage); // image upload route✅
 
 // Export the router✅
 export default router;
