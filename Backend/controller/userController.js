@@ -113,7 +113,7 @@ export const uploadImage = async (req, res) => {
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: folder,
             upload_preset: 'ml_default',
-            resource_type: req.file.mimetype === 'application/pdf' || req.file.mimetype === 'application/vnd.ms-excel' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? 'raw' : 'image',
+            resource_type: req.file.mimetype === 'application/pdf' || req.file.mimetype === 'application/vnd.ms-excel' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? 'image' : 'image',
         });
 
         // Define new image/document record for database
