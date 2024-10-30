@@ -46,7 +46,9 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        if (!email) {
+            res.status(400).send('email and password is required')
+        }
         const userExist = await User.findOne({ email });
 
         if (userExist && await userExist.matchPassword(password)) {
@@ -173,7 +175,7 @@ export const uploadImage = async (req, res) => {
 // Update Image Status and Completion API Controller ✅
 export const updateImageStatus = async (req, res) => {
     try {
-        const { POstatus, POcompletedAt, Accountantstatus, AccountantcompletedAt, GRNstatus, GRNcompletedAt, POnumber, GRNnumber, stamp } = req.body;
+        const { POemail, POstatus, POcompletedAt, Accountantemail, Accountantstatus, AccountantcompletedAt, GRNemail, GRNstatus, GRNcompletedAt, POnumber, GRNnumber, stamp } = req.body;
 
         const imageId = req.params.id;
         const image = await Image.findById(imageId);
@@ -183,6 +185,11 @@ export const updateImageStatus = async (req, res) => {
 
         const currentTime = new Date();
         const updateData = {};
+        if (POemail || GRNemail || Accountantemail) {
+            updateData.POemail = POemail || image.POemail
+            updateData.GRNemail = GRNemail || image.GRNemail
+            updateData.Accountantemail = Accountantemail || image.GRNemail
+        }
 
         if (POnumber || GRNnumber || stamp) {
             updateData.POnumber = POnumber || image.POnumber;
