@@ -78,10 +78,12 @@ const GrnDashboard = () => {
                 return;
             }
 
+            const GRNemail=localStorage.getItem('email')
             await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
                 GRNstatus: 'Done',
                 GRNcompletedAt,
-                GRNnumber: formData[index].GRNnumber
+                GRNnumber: formData[index].GRNnumber,
+                GRNemail:GRNemail
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -104,7 +106,8 @@ const GrnDashboard = () => {
                     ...updatedImages[index],
                     GRNstatus: 'Done',
                     GRNcompletedAt,
-                    GRNnumber: formData[index].GRNnumber
+                    GRNnumber: formData[index].GRNnumber,
+                    GRNemail:GRNemail
                 };
                 setImages(updatedImages);
             }

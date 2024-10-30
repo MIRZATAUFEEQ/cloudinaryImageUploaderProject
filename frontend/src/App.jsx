@@ -17,6 +17,9 @@ import AdminDashboard from './pages/Admin/AdminDashboard'
 import GrnSignup from './pages/GRN/GrnSignup'
 import GrnLogin from './pages/GRN/GrnLogin'
 import GrnDashboard from './pages/GRN/GrnDashboard'
+import POdetails from './pages/Admin/Employdetails/POdetails'
+import GRNdetails from './pages/Admin/Employdetails/GRNdetails'
+import Accountantdetails from './pages/Admin/Employdetails/Accountantdetails'
 
 
 const App = () => {
@@ -42,9 +45,14 @@ const App = () => {
             <Route exact path='/accountantsignup' element={<AccountantAdminSignup />} />
             <Route exact path='/accountantlogin' element={<AccountantAdminLogin />} />
             <Route exact path='/accountantdashboard' element={<AccountantAdminDashboard />} />
+
             <Route exact path='/adminsignup' element={<AdminSignup />} />
             <Route exact path='/adminlogin' element={<AdminLogin />} />
-            <Route exact path='/admindashboard' element={<AdminDashboard />} />
+            <Route exact path='/admindashboard' element={<AdminDashboard />}>
+            <Route exact path='podetail' element={<POdetails/>}/>
+            <Route exact path='grndetail' element={<GRNdetails/>} />
+            <Route exact path='accountantdetail' element={<Accountantdetails/>} />
+            </Route>
 
           </Routes>
         </BrowserRouter>

@@ -21,6 +21,7 @@ const GrnLogin = () => {
 
             if (isAdmin) {
                 localStorage.setItem('token', token)
+                localStorage.setItem('email',formData.email)
                 alert('GRN login successfully')
                 navigate('/grndashboard')
             }

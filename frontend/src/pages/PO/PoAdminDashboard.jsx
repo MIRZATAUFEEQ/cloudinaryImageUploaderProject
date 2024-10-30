@@ -68,11 +68,12 @@ const PoAdminDashboard = () => {
         alert('Please enter a PO number before updating the status.');
         return;
       }
-
+      const POemail = localStorage.getItem('email')
       await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
         POstatus: 'Done',
         POcompletedAt,
-        POnumber: formData[index].POnumber // Use the specific PO number
+        POnumber: formData[index].POnumber, // Use the specific PO number
+        POemail: POemail
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -93,7 +94,8 @@ const PoAdminDashboard = () => {
           ...updatedImages[index],
           POstatus: 'Done',
           POcompletedAt,
-          POnumber: formData[index].POnumber
+          POnumber: formData[index].POnumber,
+          POemail: POemail
         };
         setImages(updatedImages);
       }

@@ -68,10 +68,12 @@ const AccountantAdminDashboard = () => {
                 alert('please check on checkbox before updating your status')
                 return
             }
+            const Accountantemail = localStorage.getItem('email')
             await axios.patch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/admin/images/${imageId}`, {
                 Accountantstatus: 'Done',
                 AccountantcompletedAt,
-                stamp: stamp
+                stamp: stamp,
+                Accountantemail: Accountantemail
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -93,7 +95,8 @@ const AccountantAdminDashboard = () => {
                     ...updatedImages[index],
                     Accountantstatus: 'Done',
                     AccountantcompletedAt,
-                    stamp: stamp
+                    stamp: stamp,
+                    Accountantemail: Accountantemail
                 };
                 setImages(updatedImages);
             }

@@ -22,6 +22,7 @@ const PoAdminSignup = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/registeruser`, formData);
             localStorage.setItem('token', response.data.token);  // Save token
+            localStorage.setItem('email',formData.email)
             alert(` ${formData.username} as a PO, Signup successful!`);
             navigate('/podashboard');  // Redirect to image upload after signup
         } catch (error) {
