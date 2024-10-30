@@ -38,6 +38,10 @@ let imageSchema = new mongoose.Schema({
 
 
     // Add POStatus and POCompletedAt fields✅
+    POemail: {
+        type: String,
+        default: ''
+    },
     POnumber: {
         type: String,
         default: ''
@@ -58,6 +62,10 @@ let imageSchema = new mongoose.Schema({
 
 
     // Add Accountantstatus and AccountantcompletedAt fields✅
+    Accountantemail: {
+        type: String,
+        default: ''
+    },
     Accountantstatus: {
         type: String,
         default: 'Pending',
@@ -72,6 +80,10 @@ let imageSchema = new mongoose.Schema({
 
 
     // start grn data here 
+    GRNemail: {
+        type: String,
+        default: ''
+    },
     GRNnumber: {
         type: String,
         default: ''
