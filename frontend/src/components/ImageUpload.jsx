@@ -67,7 +67,7 @@ const ImageUpload = () => {
         try {
             const token = localStorage.getItem('token'); // Get the token
 
-            // API call to backend to upload file
+            // API call to backend to upload file to database
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/user/upload`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include the token in headers
@@ -75,9 +75,13 @@ const ImageUpload = () => {
                 },
             });
 
-            // Uploaded file URL
-            setUploadedUrl(response.data.fileUrl); // Update based on backend response field
-            alert(`Your ${file.type.includes('image') ? 'image' : 'file'} has been successfully uploaded`);
+            // Handle backend response (for example, file details returned)
+            if (response.data.success) {
+                setUploadedUrl(response.data.fileUrl); // If the backend returns a URL or path
+                alert(`Your ${file.type.includes('image') ? 'image' : 'file'} has been successfully uploaded to the database`);
+            } else {
+                alert('File upload failed');
+            }
 
         } catch (error) {
             console.log(error);

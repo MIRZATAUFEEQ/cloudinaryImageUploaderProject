@@ -131,6 +131,39 @@ const AccountantAdminDashboard = () => {
         }));
     };
 
+
+    const getMimeType = (fileExtension) => {
+        switch (fileExtension.toLowerCase()) {
+          case 'pdf':
+            return 'application/pdf';
+          case 'xls':
+            return 'application/vnd.ms-excel';
+          case 'xlsx':
+            return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+          case 'doc':
+            return 'application/msword';
+          case 'docx':
+            return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+          case 'txt':
+            return 'text/plain';
+          case 'csv':
+            return 'text/csv';
+          case 'jpg':
+          case 'jpeg':
+            return 'image/jpeg';
+          case 'png':
+            return 'image/png';
+          case 'gif':
+            return 'image/gif';
+          case 'mp3':
+            return 'audio/mpeg';
+          case 'mp4':
+            return 'video/mp4';
+          default:
+            return 'application/octet-stream'; // Generic type for unknown formats
+        }
+      };
+
     return (
         <div className='bg-[rgb(1,1,1)] min-h-screen w-full'>
             <h1 className='text-center text-3xl text-white mb-4 pt-4 font-bold font-serif'>Accountant Dashboard</h1>
@@ -149,7 +182,7 @@ const AccountantAdminDashboard = () => {
                 </select>
             </div>
 
-            <div className='w-full h-full px-5'>
+            <div className='w-full h-full px-4'>
                 <div className='sticky top-0 grid grid-cols-2 md:grid-cols-8 gap-4 py-5 border-b bg-[rgb(173,97,25)] z-10'>
                     <div><h3 className='text-white'>Username</h3></div>
                     <div><h3 className='text-white'>Email</h3></div>
@@ -173,10 +206,36 @@ const AccountantAdminDashboard = () => {
                                     src={image.path}
                                     alt={image.filename}
                                     onDoubleClick={() => {
-                                        console.log(`Opening image: ${image.path}`);
-                                        window.open(image.path, '_blank');
+                                      // Check if the image path is a Buffer object
+                                      if (image.path && image.path.type === 'Buffer') {
+                                        // Get file extension from filename
+                                        const fileExtension = image.filename.split('.').pop();
+                                        
+                                        // Get the MIME type based on the file extension
+                                        const mimeType = getMimeType(fileExtension);
+                                  
+                                        // Convert the buffer to a Blob and create a download link
+                                        const blob = new Blob([new Uint8Array(image.path.data)], { type: mimeType });
+                                        const blobUrl = URL.createObjectURL(blob);
+                                        
+                                        // Create a temporary anchor element to trigger the download
+                                        const link = document.createElement('a');
+                                        link.href = blobUrl;
+                                        link.download = image.filename || 'file';
+                                        link.click(); // Trigger the download
+                                      } else if (typeof image.path === 'string') {
+                                        // Handle case where image.path is a valid URL
+                                        const fileUrl = image.path;
+                                        const link = document.createElement('a');
+                                        link.href = fileUrl;
+                                        link.download = image.filename || 'file';
+                                        link.click(); // Trigger the download
+                                      } else {
+                                        console.error('Invalid file URL:', image.path);
+                                        alert('Failed to download file. Invalid URL.');
+                                      }
                                     }}
-                                    className='h-[3rem] w-[4rem] rounded-md cursor-pointer hover:opacity-80 transition-opacity'
+                                    className='h-[3rem] w-[8rem] cursor-pointer hover:opacity-80 transition-opacity'
                                 />
 
                             </div>
