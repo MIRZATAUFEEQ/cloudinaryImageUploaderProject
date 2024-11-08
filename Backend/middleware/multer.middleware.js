@@ -1,15 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 
-// Configure multer storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/temp');  // Destination folder
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname); // Set the filename
-    }
-});
+const storage = multer.memoryStorage();  // Store the file as Buffer in memory
 
 // Create the multer instance with the defined storage
 const upload = multer({
@@ -29,7 +21,7 @@ const upload = multer({
 
         console.log('File received:', file.originalname, 'MIME type:', file.mimetype); // Log the file details
 
-        // Allow all file types if allowedFileTypes is empty
+        // Allow file types if allowedFileTypes is empty or file type is allowed
         if (allowedFileTypes.length === 0 || allowedFileTypes.includes(file.mimetype)) {
             return cb(null, true);  // Accept the file
         }
