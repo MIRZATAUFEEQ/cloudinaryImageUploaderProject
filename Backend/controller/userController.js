@@ -1,8 +1,6 @@
 import User from '../models/usermodel.js';
 import generateToken from '../utils/generatetoken.js';
 import Image from '../models/imagemodel.js';
-import { v2 as cloudinary } from 'cloudinary';
-import * as fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Logout from '../models/userlogou.models.js';
 import multer from 'multer'
@@ -89,12 +87,6 @@ export const logoutUser = async (req, res) => {
     }
 };
 
-// Cloudinary Configuration ✅
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 // Upload Image API Controller (Optimized) ✅
 export const uploadImage = async (req, res) => {
@@ -108,20 +100,10 @@ export const uploadImage = async (req, res) => {
             return res.status(400).send('No file uploaded');
         }
 
-        // Define Cloudinary folder based on file type
-        const folder = req.file.mimetype.startsWith('image/') ? 'user_avatar' : 'user_docs';
-
-        // Upload file to Cloudinary
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: folder,
-            upload_preset: 'ml_default',
-            resource_type: req.file.mimetype === 'application/pdf' || req.file.mimetype === 'application/vnd.ms-excel' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? 'image' : 'image',
-        });
-
         // Define new image/document record for database
         const image = new Image({
-            filename: req.file.filename,
-            path: result.secure_url,
+            filename: req.file.originalname,
+            path: req.file.buffer,
             contentType: req.file.mimetype,
             size: req.file.size,
             username: user.username,
@@ -141,7 +123,6 @@ export const uploadImage = async (req, res) => {
         // Save the image/document and update user data asynchronously
         await Promise.all([
             image.save(),
-            fs.unlinkSync(req.file.path),
             User.findByIdAndUpdate(req.user._id, {
                 $inc: { imageCount: 1 },
                 $push: { uploadedImages: image._id },
@@ -150,8 +131,9 @@ export const uploadImage = async (req, res) => {
 
         // Send response to client
         res.status(201).send({
+            success:true,
             message: 'File uploaded successfully',
-            fileUrl: result.secure_url,
+            fileUrl: req.file.buffer,
             username: user.username,
             uploadedImages: user.uploadedImages,
             imageCount: user.imageCount,
@@ -159,7 +141,6 @@ export const uploadImage = async (req, res) => {
         });
     } catch (error) {
         // Remove file from local storage if an error occurs
-        fs.unlinkSync(req.file.path);
         console.error('Error uploading file', error);
         // Handle specific multer errors
         if (error instanceof multer.MulterError) {
