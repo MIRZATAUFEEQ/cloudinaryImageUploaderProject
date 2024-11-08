@@ -7,7 +7,7 @@ let imageSchema = new mongoose.Schema({
     },
 
     path: {
-        type: String,
+        type: Buffer,
         required: true
     },
 
