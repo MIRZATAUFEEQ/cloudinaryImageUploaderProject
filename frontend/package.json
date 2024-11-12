@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Taufeeq",
+  "description": "POManager is a modern web application built using the MERN stack (MongoDB, Express.js, React, Node.js) that allows users to easily upload and manage Purchase Orders (POs) through a seamless interface.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
